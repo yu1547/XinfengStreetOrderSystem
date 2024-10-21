@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>餐點製作清單</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            max-width: 600px;
+            min-width: 600px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button {
+            min-width: 80px;
+            padding: 5px 10px;
+        }
+
+        .total-revenue {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>餐點製作清單</h1>
+        <div id="order-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>序號</th>
+                        <th>餐點內容物</th>
+                        <th>製作狀態</th>
+                        <th>金額</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="orders">
+                    <!-- 餐點清單會在這裡顯示 -->
+                </tbody>
+            </table>
+        </div>
+        <div class="total-revenue" id="revenue">本日營業額: 0 元</div>
+
+        <!-- 新增返回鍵 -->
+        <a href="itemManage.html" class="back-button">返回</a>
+    </div>
+
+    <!-- 外部 JS 檔案 -->
+    <script src="Meal Production List.js"></script>
+</body>
+</html>
