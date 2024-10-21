@@ -10,6 +10,27 @@ body {
     font-size: 1.2vw; /* 使用相對單位 */
 }
 
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.back-button button {
+    background-color: #f5a623;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.back-button button:hover {
+    background-color: #e59500;
+}
+
+
 .container {
     width: 100%; /* 全螢幕寬度 */
     padding: 2%; /* 使用百分比間距 */

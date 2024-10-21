@@ -19,3 +19,11 @@ $(document).ready(function() {
         dateFormat: "yy-mm-dd" // 設置日期格式
     });
 });
+
+document.getElementById("backButton").addEventListener("click", function() {
+    window.location.href = "browseMenu.html";
+});
+
+document.querySelector(".submit-btn button").addEventListener("click", function() {
+    window.location.href = "餐點狀態顯示.html";
+});
