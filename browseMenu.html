@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜單</title>
+    <link rel="stylesheet" href="browseMenu.css">
+</head>
+<body>
+    <div class="container">
+        <h1>菜單</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="搜尋...">
+        </div>
+        <div class="categories">
+            <span class="active" onclick="setActive(this, 'special')">特別套餐</span>
+            <span onclick="setActive(this, 'burger')">漢堡</span>
+            <span onclick="setActive(this, 'noodles')">蛋餅</span>
+            <span onclick="setActive(this, 'snacks')">小點</span>
+            <span onclick="setActive(this, 'drinks')">飲料</span>
+        </div>
+        <div class="menu-list active" id="special">
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>特別套餐A</strong>
+                    <img src="setA.jpg" alt="特別套餐A" class="item-image">
+                    <p class="item-price">$140</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity1')">-</button>
+                    <input type="text" value="0" id="quantity1" readonly>
+                    <button onclick="changeQuantity(1, 'quantity1')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>特別套餐B</strong>
+                    <img src="setB.jpg" alt="特別套餐B" class="item-image">
+                    <p class="item-price">$150</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity2')">-</button>
+                    <input type="text" value="0" id="quantity2" readonly>
+                    <button onclick="changeQuantity(1, 'quantity2')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+        </div>
+        <div class="menu-list" id="burger">
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>卡拉雞腿堡</strong>
+                    <img src="chikenBurger.jpg" alt="卡拉雞腿堡" class="item-image">
+                    <p class="item-price">$70</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity3')">-</button>
+                    <input type="text" value="0" id="quantity3" readonly>
+                    <button onclick="changeQuantity(1, 'quantity3')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>牛肉漢堡</strong>
+                    <img src="beefBurger.jpg" alt="牛肉漢堡" class="item-image">
+                    <p class="item-price">$80</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity4')">-</button>
+                    <input type="text" value="0" id="quantity4" readonly>
+                    <button onclick="changeQuantity(1, 'quantity4')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+        </div>
+        <div class="menu-list" id="noodles">
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>原味蛋餅</strong>
+                    <img src="omelet.jpg" alt="原味蛋餅" class="item-image">
+                    <p class="item-price">$30</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity5')">-</button>
+                    <input type="text" value="0" id="quantity5" readonly>
+                    <button onclick="changeQuantity(1, 'quantity5')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>起司蛋餅</strong>
+                    <img src="cheese_omelet.jpg" alt="起司蛋餅" class="item-image">
+                    <p class="item-price">$35</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity6')">-</button>
+                    <input type="text" value="0" id="quantity6" readonly>
+                    <button onclick="changeQuantity(1, 'quantity6')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+        </div>
+        <div class="menu-list" id="snacks">
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>薯條</strong>
+                    <img src="fries.jpg" alt="薯條" class="item-image">
+                    <p class="item-price">$35</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity7')">-</button>
+                    <input type="text" value="0" id="quantity7" readonly>
+                    <button onclick="changeQuantity(1, 'quantity7')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>小雞球</strong>
+                    <img src="chicken_nugget.jpg" alt="小雞球" class="item-image">
+                    <p class="item-price">$30</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity8')">-</button>
+                    <input type="text" value="0" id="quantity8" readonly>
+                    <button onclick="changeQuantity(1, 'quantity8')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+        </div>
+        <div class="menu-list" id="drinks">
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>紅茶</strong>
+                    <img src="blacktea.jpg" alt="紅茶" class="item-image">
+                    <p class="item-price">$25</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity9')">-</button>
+                    <input type="text" value="0" id="quantity9" readonly>
+                    <button onclick="changeQuantity(1, 'quantity9')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <strong>柳橙汁</strong>
+                    <img src="orangeJuice.jpg" alt="柳橙汁" class="item-image">
+                    <p class="item-price">$40</p>
+                </div>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity(-1, 'quantity10')">-</button>
+                    <input type="text" value="0" id="quantity10" readonly>
+                    <button onclick="changeQuantity(1, 'quantity10')">+</button>
+                </div>
+                <button class="add-btn">加入</button>
+            </div>
+        </div>
+        <button class="order-btn">點菜</button>
+    </div>
+    <script src="browseMenu.js"></script>
+</body>
+</html>

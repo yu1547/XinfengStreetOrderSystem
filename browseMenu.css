@@ -1,0 +1,133 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.categories {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.categories span {
+    font-size: 0.9em;
+    padding: 5px 10px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+
+.categories span.active {
+    border-bottom: 2px solid #000;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.item-info {
+    flex-grow: 1;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+
+.item-price {
+    color: #666;
+    font-size: 1em;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.quantity-control button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.quantity-control input {
+    width: 30px;
+    text-align: center;
+    border: none;
+    font-size: 1em;
+}
+
+.add-btn {
+    background-color: #e6007e;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    margin-right: 10px;
+}
+
+.order-btn {
+    background-color: #e6007e;
+    color: white;
+    padding: 15px;
+    border-radius: 50px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    border: none;
+    font-size: 1.2em;
+}
+
+.menu-list {
+    display: none;
+}
+
+.menu-list.active {
+    display: block;
+}
+
+.item-image {
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
+    object-fit: cover;
+}
