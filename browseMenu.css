@@ -7,7 +7,7 @@ body {
 }
 /* 容器樣式 */
 .container {
-    max-width: 400px; /* 最大寬度 */
+    max-width: 600px; /* 最大寬度 */
     margin: 0 auto; /* 自動左右邊距 */
     background-color: white; /* 背景顏色 */
     padding: 20px; /* 內邊距 */
@@ -29,6 +29,7 @@ h1 {
 /* 搜索框樣式 */
 .search-bar input {
     width: 100%; /* 寬度100% */
+    max-width: 500px;
     padding: 10px; /* 內邊距 */
     border: 1px solid #ccc; /* 邊框 */
     border-radius: 5px; /* 圓角 */
@@ -65,8 +66,9 @@ h1 {
     display: flex; /* 使用flexbox */
     align-items: center; /* 垂直置中 */
     justify-content: space-between; /* 增加間隔 */
-    margin-right: 10px; /* 右邊距，增加與加減按鈕的間隔 */
+    margin-right: 20px; /* 右邊距，增加與加減按鈕的間隔 */
 }
+
 /* 價格樣式 */
 .item-price {
     color: #666; /* 字體顏色 */
@@ -76,7 +78,7 @@ h1 {
 .quantity-control {
     display: flex; /* 使用flexbox */
     align-items: center; /* 垂直置中 */
-    margin-right: 10px; /* 右邊距，增加與加入按鈕的間隔 */
+    margin-right: 15px; /* 右邊距，增加與加入按鈕的間隔 */
 }
 /* 數量控制按鈕樣式 */
 .quantity-control button {
@@ -100,7 +102,7 @@ h1 {
     border-radius: 5px; /* 圓角 */
     cursor: pointer; /* 鼠標樣式 */
     border: none; /* 去掉邊框 */
-    margin-right: 10px; /* 右邊距，增加與加入按鈕的間隔 */
+    margin-right: 15px; /* 右邊距，增加與加入按鈕的間隔 */
 }
 /* 點菜單按鈕樣式 */
 .order-btn {
@@ -131,4 +133,33 @@ h1 {
     margin-left: 10px; /* 左邊距 */
     margin-right: 10px; /* 右邊距 */
     object-fit: cover; /* 使圖片保持比例，並填滿框 */
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 90%;
+        padding: 15px;
+        box-shadow: none;
+    }
+    .menu-item {
+        flex-direction: column; /* 垂直排列 */
+        align-items: flex-start;
+    }
+    .item-image {
+        width: 100%;
+        height: auto;
+    }
+    .item-info {
+        flex-direction: column; 
+        margin-right: 0;
+    }
+    .search-bar input {
+        max-width: 100%; /* 移動端全寬 */
+    }
+    .categories {
+        flex-direction: column;
+    }
+    .order-btn {
+        width: 80%; 
+    }
 }
