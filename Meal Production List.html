@@ -40,10 +40,11 @@
             max-width: 600px;
             border-collapse: collapse;
             margin-top: 20px;
+            border: none; /* 移除表格邊框 */
         }
 
         th, td {
-            border: 1px solid #ddd;
+            border-bottom: 1px solid #ddd; /* 只顯示橫線 */
             padding: 8px;
             text-align: center;
             overflow: hidden;
@@ -58,11 +59,11 @@
 
         /* 所有按鈕的基本樣式 */
         button {
-            min-width: 80px;
-            padding: 10px 20px;
+            min-width: 70px; /* 縮小最小寬度 */
+            padding: 8px 16px; /* 減小內邊距 */
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px; /* 減小圓角半徑 */
+            font-size: 0.9rem; /* 減小字體大小 */
             cursor: pointer;
             color: white;
         }
