@@ -5,26 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>餐點製作清單</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+            font-weight: bold; /* 全部字體加粗 */
+        }
+
+        body {
+            font-family: "Cactus Classical Serif", serif;
+            background-color: #F4E1C1;
         }
 
         .container {
             max-width: 600px;
             margin: auto;
-            background: white;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        h1 {
+            font-size: 2.5rem;
+            color: #6F2B2B;
+            border: 5px solid #6F2B2B;
+            padding: 10px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
         table {
             width: 100%;
             max-width: 600px;
-            min-width: 600px;
             border-collapse: collapse;
             margin-top: 20px;
         }
@@ -39,30 +52,68 @@
         }
 
         th {
-            background-color: #4CAF50;
+            background-color: #6F2B2B;
             color: white;
         }
 
+        /* 所有按鈕的基本樣式 */
         button {
             min-width: 80px;
-            padding: 5px 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* 接受鍵樣式 */
+        .accept-button {
+            background-color: #E0E0FF; /* 淡紫色背景 */
+            color: #000000; /* 黑色字體 */
+        }
+
+        /* 拒絕鍵樣式 */
+        .reject-button {
+            background-color: #781717; /* 深紅色背景 */
+        }
+
+        /* 已拒絕狀態紅色字體 */
+        .rejected-status {
+            color: red;
         }
 
         .total-revenue {
             margin-top: 20px;
             font-size: 1.2em;
             font-weight: bold;
+            color: #6F2B2B;
         }
 
         .back-button {
             margin-top: 20px;
             display: inline-block;
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #6F2B2B;
             color: white;
             text-align: center;
             text-decoration: none;
             border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            table {
+                max-width: 100%;
+            }
+
+            th, td {
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -86,8 +137,6 @@
             </table>
         </div>
         <div class="total-revenue" id="revenue">本日營業額: 0 元</div>
-
-        <!-- 新增返回鍵 -->
         <a href="itemManage.html" class="back-button">返回</a>
     </div>
 

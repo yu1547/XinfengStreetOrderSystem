@@ -9,17 +9,18 @@ function renderOrders() {
     orderList.innerHTML = '';
     let totalRevenue = 0; // 營業額變數
     orders.forEach(order => {
+        const statusClass = order.status === '已拒絕' ? 'rejected-status' : ''; // 如果狀態是已拒絕，應用紅色字體樣式
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${order.id}</td>
             <td>${order.item}</td>
-            <td>${order.status}</td>
+            <td class="${statusClass}">${order.status}</td>
             <td>${order.amount}元</td>
             <td>
-                ${order.status === '製作中' ? `<button onclick="completeOrder(${order.id})">完成</button>` : ''}
+                ${order.status === '製作中' ? `<button class="accept-button" onclick="completeOrder(${order.id})">完成</button>` : ''}
                 ${order.status === '待接受' ? `
-                    <button onclick="acceptOrder(${order.id})">接受</button>
-                    <button onclick="rejectOrder(${order.id})">拒絕</button>` : ''}
+                    <button class="accept-button" onclick="acceptOrder(${order.id})">接受</button>
+                    <button class="reject-button" onclick="rejectOrder(${order.id})">拒絕</button>` : ''}
             </td>
         `;
         orderList.appendChild(row);
