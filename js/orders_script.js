@@ -25,5 +25,5 @@ document.getElementById("backButton").addEventListener("click", function() {
 });
 
 document.querySelector(".submit-btn button").addEventListener("click", function() {
-    window.location.href = "餐點狀態顯示.html";
+    window.location.href = "state.html";
 });

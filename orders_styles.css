@@ -1,166 +1,182 @@
-* {
+body {
+    background-color: #f4e4d4;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
-
-body {
-    background-color: #f0f0f0;
-    font-size: 1.2vw; /* 使用相對單位 */
-}
-
-.back-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-.back-button button {
-    background-color: #f5a623;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-.back-button button:hover {
-    background-color: #e59500;
-}
-
 
 .container {
-    width: 100%; /* 全螢幕寬度 */
-    padding: 2%; /* 使用百分比間距 */
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    margin: 50px auto;
+    background-color: #fff5e4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
-    font-size: 2vw; /* 調整字體大小使用相對單位 */
-    margin-bottom: 2%;
+    color: #8c4c33;
+    border-bottom: 5px double #6F2B2B;
+    font-size: 36px;
+    margin-bottom: 40px;
 }
 
 .order-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between; /* 使項目均勻分布 */
-    padding: 2% 0;
-    border-bottom: 1px solid #ccc;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .item-image img {
-    
-    height: 20vh; /* 使用視窗高度的 10% */
-    width: auto; /* 自動調整寬度以保持比例 */
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
-
 .item-details {
-    width: 70%;
-    text-align: center; /* 使文字置中對齊 */
+    flex-grow: 1;
+    margin-left: 20px;
 }
 
 .item-name {
-    font-size: 1.5vw; /* 使用相對單位設置字體大小 */
+    font-size: 18px;
     font-weight: bold;
-}
-
-.item-description {
-    font-size: 1vw;
-    color: gray;
+    color: #8c4c33;
 }
 
 .item-price {
-    font-size: 1.5vw;
-    margin-top: 1%;
-    color: #333;
+    font-size: 16px;
+    color: #d78f77;
+    margin-top: 5px;
 }
 
 .item-quantity {
-    margin-top: 2%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: 10px;
 }
 
 .quantity-btn {
-    padding: 1% 2%;
-    font-size: 1.2vw;
-    border: 1px solid #ccc;
-    background-color: white;
+    background-color: #d78f77;
+    border: none;
+    padding: 5px 10px;
+    color: white;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-.quantity-btn:hover {
-    background-color: #f0f0f0;
-}
-
-input[type="text"], input[type="number"] {
-    width: 3vw;
+#quantity1, #quantity2 {
+    width: 30px;
     text-align: center;
-    margin: 0 1vw;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 1%;
+    margin: 0 10px;
+    border-radius: 5px;
 }
 
-.pickup-time {
-    margin-top: 4%;
-    font-size: 1.2vw;
-    display: flex;
-    align-items: center;
+.pickup-time, .notes, .total {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #8c4c33;
 }
 
-.pickup-time input {
-    width: 10vw;
-    text-align: center;
-    margin-left: 2%;
-    padding: 1%;
+#pickup-date, #pickup-hour, #note {
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.notes {
-    margin-top: 4%;
-    display: flex;
-    align-items: center; /* 使備註標籤和輸入框在同一行 */
-}
-
-.notes label {
-    margin-right: 1vw; /* 為標籤添加右邊距 */
-}
-
-.notes input {
-    width: 100%;
-    padding: 1%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.total {
-    margin-top: 4%;
-    font-size: 1.5vw;
-    text-align: right;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 90%;
 }
 
 .submit-btn {
     text-align: center;
-    margin-top: 4%;
+    margin-top: 30px;
 }
 
-.submit-btn button {
-    padding: 1% 4%;
-    font-size: 1.5vw;
-    background-color: #ccc;
+button {
+    background-color: #d78f77;
     border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-.submit-btn button:hover {
-    background-color: #bbb;
+button:hover {
+    background-color: #b06345;
+}
+
+.back-button {
+    margin: 20px;
+}
+
+#backButton {
+    background-color: #8c4c33;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .item-image img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .item-details {
+        margin-left: 0;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .item-name {
+        font-size: 16px;
+    }
+
+    .item-price {
+        font-size: 14px;
+    }
+
+    .item-quantity {
+        margin-top: 5px;
+    }
+
+    #quantity1, #quantity2 {
+        width: 50px;
+    }
+
+    .pickup-time, .notes, .total {
+        font-size: 14px;
+    }
+
+    
+    .submit-btn button {
+        width: 100%;
+    }
+
+    .back-button {
+        text-align: center;
+    }
+
+    #backButton {
+        width: 100%;
+    }
 }
