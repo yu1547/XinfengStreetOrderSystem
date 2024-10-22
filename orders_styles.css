@@ -1,5 +1,5 @@
 body {
-    background-color: #f4e4d4;
+    background-color: #F4E1C1;
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
@@ -8,7 +8,7 @@ body {
 .container {
     width: 60%;
     margin: 50px auto;
-    background-color: #fff5e4;
+    background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -16,7 +16,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #8c4c33;
+    color: #6F2B2B;
     border-bottom: 5px double #6F2B2B;
     font-size: 36px;
     margin-bottom: 40px;
