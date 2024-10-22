@@ -16,3 +16,9 @@ function changeQuantity(amount, quantityId) {
     }
     quantityInput.value = currentQuantity;
 }
+
+function redirectToOrderPage() {
+    window.location.href = "orders.html";
+}
+
+document.getElementById('ordersBtn').addEventListener('click', redirectToOrderPage);
