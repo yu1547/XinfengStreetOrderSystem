@@ -55,19 +55,18 @@
 <div class="container">
     <h1>下單完成</h1>
     <p>您的訂單號碼是：<span id="order-id">5</span></p>
-    <p class="status" id="order-status">準備中</p>
+    <p class="status" id="order-status">製作完畢</p>
     <button class="back-button" onclick="goBack()">返回</button>
 </div>
 
 <script>
     const statestring = "準備中 製作完畢 已拒絕";
 
-    // 返回上一頁的函數
     function goBack() {
-        window.location.href = "browseMenu.html"; // 替換為你的目標路徑
+        window.location.href = "browseMenu.html"; 
     }
 
-    // 初始狀態顯示邏輯
+ 
     function selectstate(orderId) {
         const stateArray = statestring.split(" ");
         const statusElement = document.getElementById('order-status');
@@ -75,7 +74,6 @@
         
     }
 
-    // 進行狀態選擇，並根據訂單號顯示狀態
     window.onload = function() {
         const orderId = parseInt(document.getElementById('order-id').textContent);
         selectstate(orderId);
