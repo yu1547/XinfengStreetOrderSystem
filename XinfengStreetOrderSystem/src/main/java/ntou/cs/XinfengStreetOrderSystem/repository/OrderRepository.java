@@ -4,4 +4,5 @@ import ntou.cs.XinfengStreetOrderSystem.entity.Order; // 確保導入 Order 類�
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface OrderRepository extends MongoRepository<Order, String> {
+
 }

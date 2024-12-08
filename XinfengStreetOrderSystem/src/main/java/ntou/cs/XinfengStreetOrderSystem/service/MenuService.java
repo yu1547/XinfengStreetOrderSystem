@@ -4,13 +4,19 @@ import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
 import ntou.cs.XinfengStreetOrderSystem.repository.MenuItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
 import java.util.List;
+
 
 @Service
 public class MenuService {
     @Autowired
     private MenuItemRepository menuItemRepository;
+    @Autowired
+    private FileStorageService fileStorageService; // 新增圖片處理服務
 
     public MenuService(MenuItemRepository menuItemRepository) {
         this.menuItemRepository = menuItemRepository;
@@ -37,5 +43,54 @@ public class MenuService {
     public void deleteMenuItem(String id) {
         menuItemRepository.deleteById(id);  // 根據 ID 刪除菜單項目
     }
+    
+    public MenuItem addMenuItem(String name, String description, Double price, String setContents,String category,MultipartFile image) throws IOException {
+        String imageName = fileStorageService.storeFile(image);
+        String imageUrl = "/uploads/" + imageName;
+        // 儲存圖片並取得檔案名稱
+        
+        // 新增餐點物件
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName(name);
+        menuItem.setDescription(description);
+        menuItem.setPrice(price);
+        menuItem.setSetContents(setContents);
+        menuItem.setCategory(category);
+        menuItem.setImage(imageUrl);
 
+        return menuItemRepository.save(menuItem);
+    }
+
+    public MenuItem updateMenuItem(String id, String name, String description, Double price, String setContents,String category, MultipartFile image) throws IOException {
+        MenuItem menuItem = findById(id);
+                menuItem.setName(name);
+                menuItem.setDescription(description);
+                menuItem.setPrice(price);
+                menuItem.setCategory(category);
+                menuItem.setSetContents(setContents);
+             
+
+                
+                           
+                if (image != null && !image.isEmpty()) {
+                
+                     String imageName = fileStorageService.storeFile(image);
+                     String imageUrl = "/uploads/" + imageName;
+                     menuItem.setImage(imageUrl);
+                 }
+                
+                    return menuItemRepository.save(menuItem);
+                        
+                }
+        
+                private MenuItem findById(String id) {
+                    // 使用 repository 查找對應的 menuItem
+                    return menuItemRepository.findById(id).orElseThrow();
+                }
+
+     public MenuItem getMenuById(String id) {
+             return menuItemRepository.findById(id).orElseThrow();
+    }
 }
+        
+

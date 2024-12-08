@@ -15,7 +15,7 @@ public class MenuItem {
     private boolean isAvailable=true;
     private String setContents = "";
 
-    public MenuItem(String name, String description, String image, double price, String category, boolean isAvailable, String setContents) {
+    public MenuItem() {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -85,7 +85,7 @@ public class MenuItem {
         return setContents;
     }
 
-    public void setSetContents(String setSetContents){
+    public void setSetContents(String setContents){
         this.setContents = setContents;
     }
 }
