@@ -128,7 +128,7 @@
         <!-- 套餐內容物 -->
         <div class="form-group">
             <label for="setContents">套餐內容物</label>
-            <input type="text" class="form-control" id="setContents" name="setContents" placeholder="輸入套餐內容物" required>
+            <input type="text" class="form-control" id="setContents" name="setContents" placeholder="輸入套餐內容物">
         </div>
 
         <!-- 種類 -->
@@ -141,7 +141,7 @@
         <!-- 提交和返回按鈕 -->
         <div class="buttons">
             <button type="submit" class="btn btn-primary">提交</button>
-            <a href="state.html" class="btn btn-secondary">返回菜單列表</a>
+            <a href="browseMenu.html" class="btn btn-secondary">返回菜單列表</a>
         </div>
     </form>
 </div>
@@ -199,7 +199,7 @@ if (isEditing) {
         })
         .catch(error => {
             console.error('錯誤：', error);
-            alert(`載入資料失敗，請稍後再試！錯誤信息：${error.message}`);
+            alert(`載入資料失敗，請新增一張圖片`);
         });
 }
 
@@ -220,11 +220,11 @@ document.getElementById('menuForm').addEventListener('submit', function (e) {
     })
     .then(data => {
         alert(isEditing ? '菜單更新成功！' : '新增菜單成功！');
-        window.location.href = 'state.html';
+        window.location.href = 'browseMenu.html';
     })
     .catch(error => {
         console.error('錯誤：', error);
-        alert(`操作失敗，請稍後再試！錯誤信息：${error.message}`);
+        alert(`載入資料失敗，請新增一張圖片`);
     });
 });
 </script>
