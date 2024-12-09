@@ -25,20 +25,20 @@ public class CartService {
 
     private static final String CART_SESSION_KEY = "cart";
 
-    //新增品項到暫存的購物車
+    // 新增品項到暫存的購物車
     public void addItemToCart(String customerId, OrderItem item) {
         if (item.getMenuItemId() == null) {
             throw new IllegalArgumentException("Menu item ID is required");
         }
         // 從資料庫檢查菜單品項是否存在
         MenuItem menuItem = menuItemRepository.findById(item.getMenuItemId()).orElse(null);
-    
+
         if (menuItem == null) {
             throw new IllegalArgumentException("Menu item not found: " + item.getMenuItemId());
         }
         // 檢查通過後加入購物車
         Order cart = getCart(customerId);
-    
+
         // 如果購物車中已經有該品項，增加數量
         boolean itemExists = false;
         for (OrderItem orderItem : cart.getItems()) {
@@ -48,21 +48,25 @@ public class CartService {
                 break;
             }
         }
-    
+
         // 如果購物車中沒有該品項，新增品項
         if (!itemExists) {
             cart.getItems().add(item);
         }
-        
+
+        for (OrderItem items : cart.getItems()) {
+            System.out.println("Item: " + items.getMenuItemId() + ", Quantity: " + items.getQuantity());
+        }
+
         updateTotalPrice(cart);
 
         // 更新購物車到 Session
         session.setAttribute(CART_SESSION_KEY, cart);
-    
+
         // 更新總金額
     }
 
-    //移除暫存購物車中的品項
+    // 移除暫存購物車中的品項
     public void removeItemFromCart(String customerId, String menuItemId) {
         Order cart = getCart(customerId);
         cart.getItems().removeIf(item -> item.getMenuItemId().equals(menuItemId));
@@ -70,7 +74,7 @@ public class CartService {
         session.setAttribute(CART_SESSION_KEY, cart);
     }
 
-    //獲取暫存購物車總金額
+    // 獲取暫存購物車總金額
     public double getTotalPrice(String customerId) {
         Order cart = getCart(customerId);
         return cart.getTotalPrice();
@@ -94,19 +98,19 @@ public class CartService {
         session.setAttribute(CART_SESSION_KEY, cart);
     }
 
-    //獲取暫存購物車內容，若沒有則創建一個
+    // 獲取暫存購物車內容，若沒有則創建一個
     public Order getCart(String customerId) {
         Order cart = (Order) session.getAttribute(CART_SESSION_KEY);
         if (cart == null || (cart.getCustomerId() == null || !cart.getCustomerId().equals(customerId))) {
             cart = new Order(customerId, new ArrayList<>(), 0, "Pending", null, 0, null);
             session.setAttribute(CART_SESSION_KEY, cart);
         }
+        System.out.println("Cart for " + customerId + ": " + cart);
         return cart;
     }
 
-    //清空暫存購物車
+    // 清空暫存購物車
     public void clearCart(String customerId) {
         session.removeAttribute(CART_SESSION_KEY);
     }
 }
-

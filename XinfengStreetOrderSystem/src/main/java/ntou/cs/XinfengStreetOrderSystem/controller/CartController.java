@@ -15,7 +15,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    //獲取暫存的購物車內容
+    // 獲取暫存的購物車內容
     @GetMapping("/{customerId}")
     public ResponseEntity<Order> getCart(@PathVariable String customerId) {
         Order cart = cartService.getCart(customerId);
@@ -25,7 +25,7 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    //新增品項到購物車
+    // 新增品項到購物車
     @PostMapping("/{customerId}/add")
     public ResponseEntity<Void> addItemToCart(@PathVariable String customerId, @RequestBody OrderItem item) {
         try {
@@ -37,11 +37,27 @@ public class CartController {
         }
     }
 
-    //移除購物車中的品項
+    // 移除購物車中的品項
     @DeleteMapping("/{customerId}/remove/{menuItemId}")
     public ResponseEntity<Void> removeItemFromCart(@PathVariable String customerId, @PathVariable String menuItemId) {
         cartService.removeItemFromCart(customerId, menuItemId);
         return ResponseEntity.ok().build();
+    }
+
+    // 更新購物車總金額
+    @PostMapping("/{customerId}/total")
+    public ResponseEntity<Void> updateTotal(@PathVariable String customerId, @RequestBody Double totalPrice) {
+        try {
+            // 呼叫 cartService 更新總金額
+            Order cart = cartService.getCart(customerId);
+            cart.setTotalPrice(totalPrice); // 更新總金額
+            cartService.updateTotalPrice(cart); // 更新總金額到購物車中
+
+            return ResponseEntity.ok().build(); // 回傳成功
+        } catch (Exception e) {
+            e.printStackTrace(); // 打印堆栈跟踪信息
+            return ResponseEntity.status(500).build(); // 返回 500 錯誤
+        }
     }
 
     // 獲取總金額
@@ -51,7 +67,7 @@ public class CartController {
         return ResponseEntity.ok(totalPrice);
     }
 
-    //提交購物車內容
+    // 提交購物車內容
     @PostMapping("/{customerId}/submit")
     public ResponseEntity<Order> submitOrder(@PathVariable String customerId) {
         Order cart = cartService.getCart(customerId);
