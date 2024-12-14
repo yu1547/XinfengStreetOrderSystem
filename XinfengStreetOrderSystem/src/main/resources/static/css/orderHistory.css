@@ -1,0 +1,131 @@
+body {
+    background-color: #F4E1C1;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.set-content {
+    color: gray;
+    font-size: 0.8em;
+}
+
+.container {
+    width: 60%;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #6F2B2B;
+    border-bottom: 5px double #6F2B2B;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background-color: #FFF5EE;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-details {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.order-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #8c4c33;
+}
+
+
+.order-date, .order-status ,.total-price{
+    font-size: 16px;
+    color: #d78f77;
+    margin-top: 5px;
+}
+
+.order-items {
+    margin-top: 10px;
+}
+
+.order-item-name {
+    font-size: 16px;
+    color: #8c4c33;
+}
+
+.rating-btn {
+    background-color: #d78f77;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.rating-btn:hover {
+    background-color: #b06345;
+}
+
+.back-button {
+    margin: 20px;
+}
+
+#backButton {
+    background-color: #8c4c33;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .order-details {
+        margin-left: 0;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .order-number {
+        font-size: 16px;
+    }
+
+    .order-date, .order-status {
+        font-size: 14px;
+    }
+
+    .order-items {
+        margin-top: 5px;
+    }
+
+    .order-item-name {
+        font-size: 14px;
+    }
+}
