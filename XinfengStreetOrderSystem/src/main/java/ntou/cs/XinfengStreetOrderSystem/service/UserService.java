@@ -1,5 +1,7 @@
 package ntou.cs.XinfengStreetOrderSystem.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,13 @@ public class UserService {
     private UserRepository userRepository;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public Optional<User> findUserById(String id) {
+        System.out.println("Searching for user with ID: " + id);
+        Optional<User> user = userRepository.findById(id);
+        System.out.println("User found: " + user.isPresent());
+        return user;
+    }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username); // 調用 Repository 方法
