@@ -1,10 +1,12 @@
 package ntou.cs.XinfengStreetOrderSystem.entity;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Document(collection = "orders")
 public class Order {
@@ -17,6 +19,8 @@ public class Order {
     private String orderStatus="pending";
     private Date pickupTime;
     private int orderNumber;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+
     private Date statusUpdatedAt=new Date();
 
     // Constructor, Getters and Setters

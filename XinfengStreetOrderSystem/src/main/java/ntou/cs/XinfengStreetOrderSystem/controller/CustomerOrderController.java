@@ -1,12 +1,19 @@
 package ntou.cs.XinfengStreetOrderSystem.controller;
 
-import ntou.cs.XinfengStreetOrderSystem.entity.Order;
-import ntou.cs.XinfengStreetOrderSystem.service.CustomerOrderService;
+import java.util.Date;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import ntou.cs.XinfengStreetOrderSystem.entity.Order;
+import ntou.cs.XinfengStreetOrderSystem.service.CustomerOrderService;
 
 @RestController
 @RequestMapping("/Corder")
@@ -40,6 +47,18 @@ public class CustomerOrderController {
         Optional<Order> order = orderService.getOrderById(id);
         if (order.isPresent()) {
             return ResponseEntity.ok(order.get().getOrderStatus());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
+    @GetMapping("/statusUpdatedAt/{id}")
+    public ResponseEntity<Date> getOrderStatusUpdatedAt(@PathVariable String id) {
+        Optional<Order> order = orderService.getOrderById(id);
+        if (order.isPresent()) {
+            return ResponseEntity.ok(order.get().getStatusUpdatedAt());
         } else {
             return ResponseEntity.notFound().build();
         }

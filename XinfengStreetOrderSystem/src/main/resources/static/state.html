@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>訂單狀態</title>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,6 +57,7 @@
     <h1>下單完成</h1>
     <p>您的訂單號碼是：<span id="order-id"></span></p>
     <p class="status" id="order-status"></p>
+    <p>更新時間: <span id="order-status-time"></span></p>
     <button class="back-button" onclick="goBack()">返回</button>
 </div>
 
@@ -71,60 +73,64 @@
         return urlParams.get('id'); // 返回訂單 ID
     }
 
-    // 根據訂單 ID 查詢訂單號碼和狀態的函數
-    function fetchOrderDetails(id) {
+    // 定義輪詢函數
+    function pollOrderDetails(id) {
+        setInterval(() => {
+            // 請求最新的訂單號碼
+            fetch(`/Corder/number/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const orderIdElement = document.getElementById('order-id');
+                    if (orderIdElement) {
+                        orderIdElement.textContent = data; // 更新訂單號碼
+                    }
+                })
+                .catch(error => console.error("輪詢訂單號碼失敗：", error));
 
-        // 獲取訂單號碼
-        fetch(`/Corder/number/${id}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`無法獲取訂單號碼，狀態碼：${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("訂單號碼：", data);
-                const orderIdElement = document.getElementById('order-id');
-                orderIdElement.textContent = data;  // 更新訂單號碼
-            })
-            .catch(error => {
-                console.error("獲取訂單號碼失敗：", error);
-                const orderIdElement = document.getElementById('order-id');
-                orderIdElement.textContent = "無法獲取訂單號碼";  // 顯示錯誤訊息
-            });
-
-        // 獲取訂單狀態
-        fetch(`/Corder/status/${id}`)
-    .then(response => response.text())  
-    .then(data => {
-        console.log("訂單狀態：", data);
-        const statusElement = document.getElementById('order-status');
-        if (statusElement) {
-            statusElement.textContent = data; 
-        } else {
-            console.error("找不到 order-status 元素");
-        }
-    })
-    .catch(error => {
-        console.error("獲取訂單狀態失敗：", error);
-        const statusElement = document.getElementById('order-status');
-        if (statusElement) {
-            statusElement.textContent = "無法獲取訂單狀態";  // 顯示錯誤訊息
-        }
-    });
+            // 請求最新的訂單狀態
+            fetch(`/Corder/status/${id}`)
+                .then(response => response.text())
+                .then(data => {
+                    const statusElement = document.getElementById('order-status');
+                    if (statusElement) {
+                        statusElement.textContent = data; // 更新訂單狀態
+                    }
+                })
+                .catch(error => console.error("輪詢訂單狀態失敗：", error));
+            
+            // 請求最新的訂單更新時間
+            fetch(`/Corder/statusUpdatedAt/${id}`)
+                .then(response => response.text())
+                .then(data => {
+                    const statustimeElement = document.getElementById('order-status-time');
+                    console.log("收到的日期數據：", data);
+                    if (statustimeElement) {
+                        // 手動解析日期字符串
+                        const isoDate = data.split('+')[0]; // 去除時區部分
+                        const momentObj = moment(isoDate, "YYYY-MM-DDTHH:mm:ss.SSS");
+                        if (momentObj.isValid()) {
+                            statustimeElement.textContent = momentObj.format('YYYY-MM-DD HH:mm:ss'); // 更新訂單狀態時間
+                        } else {
+                            console.error("收到的日期格式無效：", data);
+                            statustimeElement.textContent = "Invalid date"; // 設置為無效日期
+                        }
+                    }
+                })
+                .catch(error => console.error("輪詢訂單更新時間失敗：", error));
+            
+        }, 2000); // 每 2 秒請求一次伺服器
     }
 
-    // 當頁面加載時，提取 URL 中的訂單 ID 並調用函數
+    // 當頁面加載時啟動輪詢
     window.onload = function() {
         const orderId = getOrderIdFromUrl();
         if (orderId) {
-            fetchOrderDetails(orderId); // 使用 URL 中的 id 查詢訂單
+            pollOrderDetails(orderId); // 啟動輪詢
         } else {
             console.log("未找到訂單 ID");
         }
-    }
+    };
 </script>
-
 
 </body>
 </html>
