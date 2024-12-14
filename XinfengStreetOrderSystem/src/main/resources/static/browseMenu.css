@@ -7,10 +7,10 @@ body {
 }
 /* 容器樣式 */
 .container {
-    max-width: 600px; /* 最大寬度 */
+    max-width: 700px; /* 最大寬度 */
     margin: 0 auto; /* 自動左右邊距 */
     background-color: white; /* 背景顏色 */
-    padding: 20px; /* 內邊距 */
+    padding: 30px; /* 內邊距 */
     border-radius: 10px; /* 圓角 */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
 }
@@ -54,6 +54,7 @@ h1 {
 /* 菜單項目樣式 */
 .menu-item {
     display: flex; /* 使用flexbox */
+    flex-direction: row;
     justify-content: space-between; /* 左右分開 */
     align-items: center; /* 垂直置中 */
     padding: 15px 0; /* 上下內邊距 */
@@ -152,6 +153,9 @@ h1 {
     cursor: pointer; /* 鼠標樣式 */
     border: none; /* 去掉邊框 */
     margin-right: 15px; /* 右邊距，增加與加入按鈕的間隔 */
+    white-space: nowrap; /* 防止文字換行 */
+    text-align: center; /* 文字居中 */
+    writing-mode: horizontal-tb;
 }
 /* 點菜單按鈕樣式 */
 .order-btn {
@@ -167,6 +171,70 @@ h1 {
     border: none; /* 去掉邊框 */
     font-size: 1.2em; /* 字體大小 */
 }
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.heart-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('heart-outline.png'); /* 空心圖案 */
+    transition: background-image 0.3s ease;
+    margin-bottom: 5px; /* 和評價間隔 */
+}
+
+.favorite-btn[data-favorited="true"] .heart-icon {
+    background-image: url('heart-filled.png'); /* 滿心圖案 */
+}
+
+.favorite-btn[data-favorited="false"] .heart-icon {
+    background-image: url('heart-outline.png');  /* 空心圖案 */
+}
+
+/* 新的容器樣式，將愛心和評分放在一起 */
+.favorite-rating-group {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    align-items: center; /* 水平居中 */
+    margin-top: 10px; /* 增加與其他元素的間距 */
+    margin-right: 20px;
+}
+
+/* 評價容器樣式 */
+.rating-info {
+    display: flex; /* 使用flexbox */
+    justify-content: center; /* 置中 */
+    flex-direction: row; /* 星星和數字橫向排列 */
+    align-items: center; /* 垂直置中 */
+    margin-top: 5px; /* 上邊距 */
+    font-size: 1em; /* 字體大小 */
+    color: #6F2B2B; /* 顏色與標題相同 */
+}
+
+/* 評價數字樣式 */
+.rating-info span {
+    margin-right: 5px; /* 評價數字與星星之間的間距 */
+    font-weight: bold; /* 加粗字體 */
+}
+
+/* 星星圖案 */
+.star-icon {
+    width: 16px; /* 星星圖案大小 */
+    height: 16px; /* 星星圖案大小 */
+    background-size: contain; /* 確保圖片比例正確 */
+    background-repeat: no-repeat; /* 不重複顯示圖片 */
+    background-image: url('star.png'); /* 空心圖案 */
+    margin-left: 2px; /* 星星和數字之間的間隔 */
+}
+
+
 /* 菜單項目隱藏樣式 */
 .menu-list {
     display: none; /* 隱藏所有菜單 */
@@ -191,7 +259,7 @@ h1 {
         box-shadow: none;
     }
     .menu-item {
-        flex-direction: column; /* 垂直排列 */
+        flex-direction: row; /* 垂直排列 */
         align-items: flex-start;
     }
     .item-image {

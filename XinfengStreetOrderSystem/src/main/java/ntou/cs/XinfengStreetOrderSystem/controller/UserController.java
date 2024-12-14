@@ -1,11 +1,14 @@
 package ntou.cs.XinfengStreetOrderSystem.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,46 +38,44 @@ public class UserController {
         }
     }
 
-   // Login Endpoint
-@PostMapping("/login")
-public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest) {
-    boolean isAuthenticated = userService.login(loginRequest); // 檢查帳號與密碼是否正確
+    // Login Endpoint
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest) {
+        boolean isAuthenticated = userService.login(loginRequest); // 檢查帳號與密碼是否正確
 
-    if (isAuthenticated) {
-        // 根據用戶名或其他識別信息查詢用戶角色
-        User user = userService.findByUsername(loginRequest.getUsername());
-        if (user == null) {
-            return ResponseEntity.badRequest().body(Map.of("message", "用戶不存在"));
-        }
+        if (isAuthenticated) {
+            // 根據用戶名或其他識別信息查詢用戶角色
+            User user = userService.findByUsername(loginRequest.getUsername());
+            if (user == null) {
+                return ResponseEntity.badRequest().body(Map.of("message", "用戶不存在"));
+            }
 
-        // 根據角色決定跳轉的頁面
-        String redirectPage;
-        if ("boss".equals(user.getRole())) {
-            redirectPage = "menu-management"; // 老闆跳轉到菜單管理頁面
-        } else if ("customer".equals(user.getRole())) {
-            redirectPage = "menu-browse"; // 顧客跳轉到菜單瀏覽頁面
+            // 根據角色決定跳轉的頁面
+            String redirectPage;
+            if ("boss".equals(user.getRole())) {
+                redirectPage = "menu-management"; // 老闆跳轉到菜單管理頁面
+            } else if ("customer".equals(user.getRole())) {
+                redirectPage = "menu-browse"; // 顧客跳轉到菜單瀏覽頁面
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("message", "無效的用戶角色"));
+            }
+
+            // 返回成功訊息和跳轉路徑
+            return ResponseEntity.ok(Map.of(
+                    "message", "登入成功",
+                    "role", user.getRole(),
+                    "redirect", redirectPage));
         } else {
-            return ResponseEntity.badRequest().body(Map.of("message", "無效的用戶角色"));
+            return ResponseEntity.badRequest().body(Map.of("message", "帳號或密碼錯誤"));
         }
-
-        // 返回成功訊息和跳轉路徑
-        return ResponseEntity.ok(Map.of(
-            "message", "登入成功",
-            "role", user.getRole(),
-            "redirect", redirectPage
-        ));
-    } else {
-        return ResponseEntity.badRequest().body(Map.of("message", "帳號或密碼錯誤"));
     }
-}
 
-// 檢查帳號是否已存在
-@GetMapping("/check-username")
-public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
-    boolean isTaken = userService.isUsernameTaken(username);
-    return ResponseEntity.ok(isTaken);
-}
-
+    // 檢查帳號是否已存在
+    @GetMapping("/check-username")
+    public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
+        boolean isTaken = userService.isUsernameTaken(username);
+        return ResponseEntity.ok(isTaken);
+    }
 
     // 驗證碼
     @Autowired
@@ -90,27 +91,58 @@ public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
     @RequestMapping("/api/mail")
     public class MailController {
 
-    @Autowired
-    private MailService mailService;
+        @Autowired
+        private MailService mailService;
 
-    private Map<String, String> verificationCodes = new HashMap<>();
+        private Map<String, String> verificationCodes = new HashMap<>();
 
-    @PostMapping("/sendVerificationCode")
-    public ResponseEntity<String> sendVerificationCode(@RequestParam String email) {
-        String verificationCode = String.valueOf((int) (Math.random() * 900000) + 100000); // 生成6位數隨機碼
-        verificationCodes.put(email, verificationCode);
-        mailService.sendVerificationEmail(email, verificationCode);
-        return ResponseEntity.ok("驗證碼已寄出至：" + email);
-    }
-
-    @PostMapping("/verifyCode")
-    public ResponseEntity<String> verifyCode(@RequestParam String email, @RequestParam String code) {
-        String correctCode = verificationCodes.get(email);
-        if (correctCode != null && correctCode.equals(code)) {
-            verificationCodes.remove(email);
-            return ResponseEntity.ok("驗證成功");
+        @PostMapping("/sendVerificationCode")
+        public ResponseEntity<String> sendVerificationCode(@RequestParam String email) {
+            String verificationCode = String.valueOf((int) (Math.random() * 900000) + 100000); // 生成6位數隨機碼
+            verificationCodes.put(email, verificationCode);
+            mailService.sendVerificationEmail(email, verificationCode);
+            return ResponseEntity.ok("驗證碼已寄出至：" + email);
         }
-        return ResponseEntity.badRequest().body("驗證失敗，請重新檢查驗證碼");
+
+        @PostMapping("/verifyCode")
+        public ResponseEntity<String> verifyCode(@RequestParam String email, @RequestParam String code) {
+            String correctCode = verificationCodes.get(email);
+            if (correctCode != null && correctCode.equals(code)) {
+                verificationCodes.remove(email);
+                return ResponseEntity.ok("驗證成功");
+            }
+            return ResponseEntity.badRequest().body("驗證失敗，請重新檢查驗證碼");
+        }
     }
-}
+
+    // Get all favorite items for a user
+    @GetMapping("/{userId}/favorites")
+    public ResponseEntity<List<User.FavoriteItem>> getFavoriteItems(@PathVariable String userId) {
+        List<User.FavoriteItem> favoriteItems = userService.getFavoriteItems(userId);
+        return ResponseEntity.ok(favoriteItems);
+    }
+
+    // Add a favorite item for a user
+    @PostMapping("/{userId}/favorites/add")
+    public ResponseEntity<Void> addFavoriteItem(@PathVariable String userId,
+            @RequestBody User.FavoriteItem favoriteItem) {
+        try {
+            userService.addFavoriteItem(userId, favoriteItem);
+            return ResponseEntity.ok().build(); // Return 200 on success
+        } catch (IllegalArgumentException e) {
+            // Handle specific error cases, e.g., user not found, menu item not found, or
+            // duplicate
+            return ResponseEntity.badRequest().body(null); // Return 400 for client errors
+        } catch (Exception e) {
+            e.printStackTrace(); // Print stack trace for debugging
+            return ResponseEntity.status(500).build(); // Return 500 for unexpected errors
+        }
+    }
+
+    // Remove a favorite item for a user
+    @DeleteMapping("/{userId}/favorites/{menuItemId}/delete")
+    public ResponseEntity<Void> removeFavoriteItem(@PathVariable String userId, @PathVariable String menuItemId) {
+        userService.removeFavoriteItem(userId, menuItemId);
+        return ResponseEntity.ok().build();
+    }
 }
