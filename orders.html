@@ -1,0 +1,76 @@
+<!-- 點菜單 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>點餐單</title>
+    <script src="js/orders_script.js"></script>
+    <link rel="stylesheet" href="orders_styles.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="back-button">
+            <button id="backButton">返回</button>
+        </div>
+        <h1>點菜單</h1>
+        <div class="order-item">
+            <div class="item-image">
+                <img src="images/蛋餅.jfif" alt="原味蛋餅圖片" />
+            </div>
+            <div class="item-details">
+                <p class="item-name">原味蛋餅</p>
+                <p class="item-price">$30</p>
+                <div class="item-quantity">
+                    <label for="quantity1">數量：</label>
+                    <button class="quantity-btn" onclick="decreaseQuantity('quantity1')">-</button>
+                    <input type="text" id="quantity1" value="1" readonly>
+                    <button class="quantity-btn" onclick="increaseQuantity('quantity1')">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-item">
+            <div class="item-image">
+                <img src="images/蛋餅套餐.png" alt="原味蛋餅套餐圖片" />
+            </div>
+            <div class="item-details">
+                <p class="item-name">原味蛋餅套餐</p>
+                <p class="item-description">原味蛋餅 熱狗 紅茶</p>
+                <p class="item-price">$50</p>
+                <div class="item-quantity">
+                    <label for="quantity2">數量：</label>
+                    <button class="quantity-btn" onclick="decreaseQuantity('quantity2')">-</button>
+                    <input type="text" id="quantity2" value="1" readonly>
+                    <button class="quantity-btn" onclick="increaseQuantity('quantity2')">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="pickup-time">
+            <label for="pickup-date">取餐時間：</label><br>
+            <input type="text" id="pickup-date" placeholder="選擇日期">
+            <input type="time" id="pickup-time">
+        </div>
+
+        <div class="notes">
+            <label for="note">備註：</label><br>
+            <input type="text" id="note" placeholder="不要加洋蔥、蒜頭">
+        </div>
+
+        <div class="total">
+            <p>總金額：$80</p>
+        </div>
+
+        <div class="submit-btn">
+            <button>送出</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/orders_script.js"></script>
+</body>
+</html>

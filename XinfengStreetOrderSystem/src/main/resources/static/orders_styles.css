@@ -1,0 +1,185 @@
+body {
+    background-color: #F4E1C1;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 60%;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #6F2B2B;
+    border-bottom: 5px double #6F2B2B;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.item-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.item-details {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.item-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #8c4c33;
+}
+
+.item-price {
+    font-size: 16px;
+    color: #d78f77;
+    margin-top: 5px;
+}
+
+.item-quantity {
+    margin-top: 10px;
+}
+
+.quantity-btn {
+    background-color: #d78f77;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#quantity1, #quantity2 {
+    width: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+.pickup-time, .notes, .total {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #8c4c33;
+}
+
+#pickup-date, #pickup-time, #note {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 90%;
+}
+
+.submit-btn {
+    text-align: center;
+    margin-top: 30px;
+}
+
+button {
+    background-color: #d78f77;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #b06345;
+}
+
+.back-button {
+    margin: 20px;
+}
+
+#backButton {
+    background-color: #8c4c33;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .item-image img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .item-details {
+        margin-left: 0;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .item-name {
+        font-size: 16px;
+    }
+
+    .item-price {
+        font-size: 14px;
+    }
+
+    .item-quantity {
+        margin-top: 5px;
+    }
+
+    #quantity1, #quantity2 {
+        width: 50px;
+    }
+
+    .pickup-time, .notes, .total {
+        font-size: 14px;
+    }
+
+    
+    .submit-btn button {
+        width: 100%;
+    }
+
+    .back-button {
+        text-align: center;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    #backButton {
+        width: 100%;
+    }
+}
