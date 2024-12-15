@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-weight: bold; /* 全部字體加粗 */
+            font-weight: bold;
         }
 
         body {
@@ -40,11 +40,11 @@
             max-width: 600px;
             border-collapse: collapse;
             margin-top: 20px;
-            border: none; /* 移除表格邊框 */
+            border: none;
         }
 
         th, td {
-            border-bottom: 1px solid #ddd; /* 只顯示橫線 */
+            border-bottom: 1px solid #ddd;
             padding: 8px;
             text-align: center;
             overflow: hidden;
@@ -57,12 +57,11 @@
             color: white;
         }
 
-     
         .rating {
             display: flex;
             justify-content: center;
             gap: 5px;
-            direction: rtl; /* 右到左顯示 */
+            direction: rtl;
         }
 
         .rating input {
@@ -70,23 +69,23 @@
         }
 
         .rating label {
-            font-size: 2rem; /* 調整字型大小，讓星星更大 */
+            font-size: 2rem;
             cursor: pointer;
-            color: #ccc; /* 初始顏色為灰色 */
+            color: #ccc;
         }
 
         .rating input:checked ~ label {
-            color: #FFD700; /* 當選中的星星及其之前的星星變黃 */
+            color: #FFD700;
         }
 
         .rating input:hover ~ label,
         .rating input:checked ~ label ~ label {
-            color: #FFD700; /* 當滑鼠懸停或勾選後，顏色變黃 */
+            color: #FFD700;
         }
 
         .rating input:checked ~ label:hover,
         .rating input:checked ~ label:hover ~ label {
-            color: #FFD700; /* 確保選中的星星會改為黃色 */
+            color: #FFD700;
         }
 
         .button-container {
@@ -102,7 +101,7 @@
             font-size: 1rem;
             cursor: pointer;
             color: white;
-            background-color: #6F2B2B; /* 背景色 */
+            background-color: #6F2B2B;
             text-decoration: none;
             text-align: center;
         }
@@ -114,51 +113,80 @@
 </head>
 <body>
     <div class="container">
-        <h1>餐點評價</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>餐點名稱</th>
-                    <th>金額</th>
-                    <th>評分</th>
-                </tr>
-            </thead>
-            <tbody id="meals">
-                <!-- 餐點清單將會在這裡顯示 -->
-                <tr>
-                    <td>測試商品2</td>
-                    <td>100 元</td>
-                    <td>
-                        <div class="rating">
-                            <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                            <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                            <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                            <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                            <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="button-container">
-            <a href="browseMenu.html" class="back-button">返回菜單</a>
-            <button class="submit-button" onclick="submitRatings()">提交評價</button>
-        </div>
+      <h1>餐點評價</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>餐點名稱</th>
+            <th>數量</th>
+            <th>評分</th>
+          </tr>
+        </thead>
+        <tbody id="meals">
+        </tbody>
+      </table>
+      <div class="button-container">
+        <a href="browseMenu.html" class="back-button">返回菜單</a>
+        <button class="submit-button" onclick="submitRatings()">提交評價</button>
+      </div>
     </div>
 
     <script>
-        // 初始化
-document.addEventListener("DOMContentLoaded", () => {
-    const ratings = document.querySelectorAll(".rating");
-    ratings.forEach((rating) => {
-        // 監聽評分變更事件
-        rating.addEventListener("change", (event) => {
-            const selectedValue = event.target.value;
-            console.log(`選擇的評分: ${selectedValue} 顆星`);
-        });
-    });
-});
+      document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId'); // 取得 orderId 查詢參數
 
+        if (orderId) {
+          fetchOrderDetails(orderId); // 根據 orderId 獲取訂單詳細資料
+        }
+      });
+
+      function fetchOrderDetails(orderId) {
+        fetch(`http://localhost:8080/orders/${orderId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('獲取訂單詳細資料失敗');
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data && Array.isArray(data.items)) {
+              renderMeals(data.items); // 確保 items 是一個陣列
+            } else {
+              throw new Error('訂單資料格式錯誤');
+            }
+          })
+          .catch(error => {
+            console.error("獲取訂單詳細資料錯誤:", error);
+            alert("無法載入訂單資料，請稍後再試！");
+          });
+      }
+
+      function renderMeals(items) {
+        console.log(items);  // 查看返回的 order 物件
+        const mealsContainer = document.getElementById('meals');
+        mealsContainer.innerHTML = ''; // 清空現有餐點
+
+        items.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.menuItemId}</td>
+            <td>${item.quantity} </td>
+            <td>
+              <div class="rating">
+                <input type="radio" id="star5-${item.menuItemId}" name="rating-${item.menuItemId}" value="5"><label for="star5-${item.menuItemId}">★</label>
+                <input type="radio" id="star4-${item.menuItemId}" name="rating-${item.menuItemId}" value="4"><label for="star4-${item.menuItemId}">★</label>
+                <input type="radio" id="star3-${item.menuItemId}" name="rating-${item.menuItemId}" value="3"><label for="star3-${item.menuItemId}">★</label>
+                <input type="radio" id="star2-${item.menuItemId}" name="rating-${item.menuItemId}" value="2"><label for="star2-${item.menuItemId}">★</label>
+                <input type="radio" id="star1-${item.menuItemId}" name="rating-${item.menuItemId}" value="1"><label for="star1-${item.menuItemId}">★</label>
+              </div>
+            </td>
+          `;
+          mealsContainer.appendChild(row);
+        });
+      }
+
+     // 提交評分函式
 // 提交評分函式
 function submitRatings() {
     const ratings = document.querySelectorAll(".rating");
@@ -166,50 +194,37 @@ function submitRatings() {
 
     ratings.forEach((rating, index) => {
         const selectedInput = rating.querySelector("input:checked");
-        const mealName = document.querySelectorAll("tbody tr td:first-child")[index].textContent;
+        const menuItemId = document.querySelectorAll("tbody tr td:first-child")[index].textContent;  // 使用餐點的 menuItemId
 
-        if (selectedInput) {
-            mealRatings.push({
-                menuItemId: mealName,  // 餐點名稱作為 menuItemId
-                rating: selectedInput.value, // 評分
-            });
-        } else {
-            mealRatings.push({
-                menuItemId: mealName,
-                rating: "未評分", // 如果沒有選擇評分
-            });
-        }
+        mealRatings.push({
+            menuItemId: menuItemId,  // 確保使用正確的 menuItemId
+            rating: selectedInput ? selectedInput.value : "未評分", // 如果沒有選擇評分，則填入 "未評分"
+        });
     });
 
-    // 顯示提交的評分資料
     console.log("提交的評分資料：", mealRatings);
 
-    // 發送評分資料到後端
-    mealRatings.forEach(ratingData => {
-        fetch('http://localhost:8080/rating/api/rating', { // 使用完整的URL
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                menuItemId: ratingData.menuItemId,
-                rating: parseInt(ratingData.rating),  // 將評分轉為整數
-            }),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("回應：", data);
-            alert("評分已提交，感謝您的回饋！");
-        })
-        .catch(error => {
-            console.error('錯誤:', error);
-            alert("提交失敗，請稍後再試！");
-        });
+    // 發送評分資料
+    fetch('http://localhost:8080/rating/api/ratings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mealRatings), // 將資料轉為 JSON 發送
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("回應：", data);
+        alert("評分已提交，感謝您的回饋！");
+    })
+    .catch(error => {
+        console.error('錯誤:', error);
+        alert("提交失敗，請稍後再試！");
     });
 }
 

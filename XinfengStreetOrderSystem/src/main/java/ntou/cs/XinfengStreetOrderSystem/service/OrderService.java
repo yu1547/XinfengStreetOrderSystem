@@ -4,17 +4,16 @@ import ntou.cs.XinfengStreetOrderSystem.entity.Order;
 import ntou.cs.XinfengStreetOrderSystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final RevenueService revenueService;  // 假設您有一個 RevenueService 用來處理營業額
 
-    public OrderService(OrderRepository orderRepository, RevenueService revenueService) {
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.revenueService = revenueService;
     }
 
     // 查詢所有的訂單
@@ -38,10 +37,8 @@ public class OrderService {
 
         // 更新訂單狀態為完成
         order.setOrderStatus("completed");
+        order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
-
-        // 更新營業額
-        revenueService.updateRevenue(order.getTotalPrice());  // 使用 getTotalPrice() 來獲取訂單金額
     }
 
     // 接受訂單 (將訂單狀態更新為 accepted)
@@ -54,6 +51,7 @@ public class OrderService {
         }
 
         order.setOrderStatus("accepted");
+        order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
     }
 
@@ -68,6 +66,27 @@ public class OrderService {
         }
 
         order.setOrderStatus("rejected");
+        order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
     }
+
+    // 清除所有訂單
+    public void clearAllOrders() {
+        orderRepository.deleteAll();
+    }
+
+
+
+   // 根據訂單 ID 查詢訂單
+public Order getOrderById(String orderId) {
+    return orderRepository.findById(orderId)
+            .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
 }
+
+
+    // 其他方法...
+}
+
+
+
+

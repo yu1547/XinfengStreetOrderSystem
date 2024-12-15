@@ -31,26 +31,25 @@ public class RatingController {
     }
 
     // API: 添加評分
-    @PostMapping("/api/rating")
-    public ResponseEntity<Map<String, String>> addRating(@RequestBody Rating rating) {
-        try {
-            boolean isSuccess = ratingService.addRating(rating); // 調用服務層新增評分
-            Map<String, String> response = new HashMap<>();
-            if (isSuccess) {
-                response.put("message", "Rating added successfully");
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("message", "Failed to add rating");
-                return ResponseEntity.status(400).body(response);
-            }
-        } catch (Exception e) {
-            System.err.println("Error adding rating: " + e.getMessage());
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Error: " + e.getMessage());
-            return ResponseEntity.status(500).body(response);
+    @PostMapping("/api/ratings") // 修改路徑，以便接收多筆評分
+public ResponseEntity<Map<String, String>> addRatings(@RequestBody List<Rating> ratings) {
+    try {
+        boolean isSuccess = ratingService.addRatings(ratings); // 調用服務層新增多筆評分
+        Map<String, String> response = new HashMap<>();
+        if (isSuccess) {
+            response.put("message", "Ratings added successfully");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("message", "Failed to add ratings");
+            return ResponseEntity.status(400).body(response);
         }
+    } catch (Exception e) {
+        System.err.println("Error adding ratings: " + e.getMessage());
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Error: " + e.getMessage());
+        return ResponseEntity.status(500).body(response);
     }
-
+}
     // API: 計算並更新餐點平均評分
     @GetMapping("/api/average/{menuItemId}")
     public ResponseEntity<String> updateAverageRating(@PathVariable String menuItemId) {

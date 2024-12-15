@@ -18,20 +18,19 @@
         }
 
         .container {
-    max-width: 600px;
-    margin: auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* 確保內容不會超出容器範圍 */
-}
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* 確保內容不會超出容器範圍 */
+        }
 
-button {
-    display: block; /* 確保按鈕在其父容器內占據獨立一行 */
-    margin: 8px auto; /* 自動將按鈕水平方向居中 */
-}
-
+        button {
+            display: block; /* 確保按鈕在其父容器內占據獨立一行 */
+            margin: 8px auto; /* 自動將按鈕水平方向居中 */
+        }
 
         h1 {
             font-size: 2.5rem;
@@ -144,44 +143,51 @@ button {
                 </tbody>
             </table>
         </div>
+        <!-- 在現有容器內添加一個清除所有訂單的按鈕 -->
+        <button class="accept-button" id="clear-orders-button">清除所有訂單</button>
+
         <div class="total-revenue" id="revenue">本日營業額: 0 元</div>
         <a href="itemManage.html" class="back-button">返回</a>
     </div>
 
     <script>
-        // 初始化訂單清單
+        // 渲染訂單清單
         function renderOrders(orders) {
-    const orderList = document.getElementById('orders');
-    orderList.innerHTML = '';
-    let totalRevenue = 0; // 營業額變數
-    orders.forEach(order => {
-        const statusClass = order.orderStatus === 'rejected' ? 'rejected-status' : ''; // 如果狀態是已拒絕，應用紅色字體樣式
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${order.id}</td>
-            <td>${order.item}</td>
-            <td class="${statusClass}">${order.orderStatus}</td>
-            <td>${order.totalPrice}元</td>
-            <td>
-                ${order.orderStatus === 'accepted' ? 
-                    `<button class="accept-button" onclick="completeOrder('${order.id}')">完成</button>
-                     <button class="reject-button" onclick="rejectOrder('${order.id}')">拒絕</button>` : ''}
-                ${order.orderStatus === 'pending' ? 
-                    `<button class="accept-button" onclick="acceptOrder('${order.id}')">接受</button>
-                     <button class="reject-button" onclick="rejectOrder('${order.id}')">拒絕</button>` : ''}
-            </td>
-        `;
-        orderList.appendChild(row);
+            const orderList = document.getElementById('orders');
+            orderList.innerHTML = '';
+            let totalRevenue = 0; // 營業額變數
+            orders.forEach(order => {
+                const statusClass = order.orderStatus === 'rejected' ? 'rejected-status' : ''; // 如果狀態是已拒絕，應用紅色字體樣式
+                const row = document.createElement('tr');
 
-        // 更新營業額
-        if (order.orderStatus === 'completed') {
-            totalRevenue += order.totalPrice;
+                // 處理 items，將其轉換為顯示字串
+                const itemsContent = order.items
+                    .map(item => `${item.menuItemId} x ${item.quantity}`)
+                    .join('<br>'); // 用 <br> 分隔多個餐點
+
+                row.innerHTML = `
+                    <td>${order.orderNumber}</td>
+                    <td>${itemsContent}</td> <!-- 顯示處理後的 items -->
+                    <td class="${statusClass}">${order.orderStatus}</td>
+                    <td>${order.totalPrice}元</td>
+                    <td>
+                        ${order.orderStatus === 'accepted' ? 
+                            `<button class="accept-button" onclick="completeOrder('${order.id}')">完成</button>` : ''}
+                        ${order.orderStatus === 'pending' ? 
+                            `<button class="accept-button" onclick="acceptOrder('${order.id}')">接受</button>
+                             <button class="reject-button" onclick="rejectOrder('${order.id}')">拒絕</button>` : ''}
+                    </td>
+                `;
+                orderList.appendChild(row);
+
+                // 更新營業額
+                if (order.orderStatus === 'completed') {
+                    totalRevenue += order.totalPrice;
+                }
+            });
+            // 更新營業額顯示
+            document.getElementById('revenue').innerText = `本日營業額: ${totalRevenue} 元`;
         }
-    });
-    // 更新營業額顯示
-    document.getElementById('revenue').innerText = `本日營業額: ${totalRevenue} 元`;
-}
-
 
 
         // 取得所有訂單並顯示
@@ -214,6 +220,8 @@ button {
                 .catch(error => console.error('錯誤:', error));
         }
 
+
+      
         // 拒絕訂單
         function rejectOrder(orderId) {
             fetch(`/orders/reject?orderId=${orderId}`, { method: 'POST' })
@@ -224,6 +232,36 @@ button {
                 })
                 .catch(error => console.error('錯誤:', error));
         }
+
+
+        // 1. 清除前端資料的函數
+function clearOrdersData() {
+    // 清空訂單列表
+    const orderList = document.getElementById('orders');
+    orderList.innerHTML = '';
+
+    // 重置營業額
+    document.getElementById('revenue').innerText = '本日營業額: 0 元';
+}
+
+// 2. 清除後端訂單資料的函數
+function clearOrdersFromBackend() {
+    fetch('/orders/clear', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || '所有訂單已清除');
+            clearOrdersData(); // 完成後清空前端資料
+        })
+        .catch(error => console.error('錯誤:', error));
+}
+
+// 3. 按鈕的事件監聽器，清除所有訂單
+document.getElementById('clear-orders-button').addEventListener('click', function() {
+    if (confirm('確定要清除所有訂單資料嗎？這將會刪除所有訂單紀錄及重置營業額。')) {
+        clearOrdersFromBackend(); // 發送請求清除後端資料
+    }
+});
+
 
         // 頁面加載時，獲取訂單列表
         window.onload = fetchOrders;

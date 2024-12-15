@@ -63,4 +63,29 @@ public class OrderController {
             return ResponseEntity.badRequest().body("{\"error\": \"無法拒絕訂單: " + e.getMessage() + "\"}");
         }
     }
+
+
+// API 6: 清除所有訂單
+@PostMapping("/clear")
+public ResponseEntity<String> clearAllOrders() {
+    try {
+        orderService.clearAllOrders();  // 這裡調用服務層的清除方法
+        return ResponseEntity.ok("{\"message\": \"所有訂單已清除\"}");
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body("{\"error\": \"無法清除訂單: " + e.getMessage() + "\"}");
+    }
 }
+
+
+
+    // 根據訂單 ID 獲取訂單詳細資料
+    @GetMapping("/{orderId}")
+    public Order getOrderDetails(@PathVariable String orderId) {
+        return orderService.getOrderById(orderId);
+    }
+
+}
+
+
+
+

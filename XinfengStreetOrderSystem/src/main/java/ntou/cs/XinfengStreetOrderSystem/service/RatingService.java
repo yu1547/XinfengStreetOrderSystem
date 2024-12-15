@@ -24,19 +24,23 @@ public class RatingService {
     }
 
     // 新增評分
-    public boolean addRating(Rating rating) {
-        try {
-            // 儲存評分到資料庫
+    // 新增多筆評分的方法
+public boolean addRatings(List<Rating> ratings) {
+    try {
+        for (Rating rating : ratings) {
+            // 儲存每筆評分
             ratingRepository.save(rating);
 
             // 即時更新該餐點的平均評分
             calculateAndUpdateAverageRating(rating.getMenuItemId());
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error adding rating: " + e.getMessage());
-            return false;
         }
+        return true;
+    } catch (Exception e) {
+        System.err.println("Error adding ratings: " + e.getMessage());
+        return false;
     }
+}
+
 
     // 計算並更新平均評分
     public void calculateAndUpdateAverageRating(String menuItemId) {
