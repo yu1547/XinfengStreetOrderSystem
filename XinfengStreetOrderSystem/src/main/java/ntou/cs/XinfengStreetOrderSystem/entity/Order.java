@@ -19,7 +19,7 @@ public class Order {
     private String orderStatus="pending";
     private Date pickupTime;
     private int orderNumber;
-    private String notes; // 新增的備註字段
+    private String notes=""; // 新增的備註字段
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 
     private Date statusUpdatedAt=new Date();

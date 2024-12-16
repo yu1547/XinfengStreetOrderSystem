@@ -74,7 +74,8 @@ public class OrderHistoryController {
                             o.getOrderStatus(),
                             o.getPickupTime(),
                             orderHist.getOrderedAt(),
-                            totalPrice
+                            totalPrice,
+                            o.getNotes()
                         );
                     }).orElse(null);
                 })
@@ -96,8 +97,9 @@ public class OrderHistoryController {
         private Date pickupTime;
         private Date orderedAt;
         private double totalPrice;
+        private String notes;
 
-        public OrderDetails(String orderId, int orderNumber, List<OrderItemDetails> items, String orderStatus, Date pickupTime, Date orderedAt, double totalPrice) {
+        public OrderDetails(String orderId, int orderNumber, List<OrderItemDetails> items, String orderStatus, Date pickupTime, Date orderedAt, double totalPrice,String notes) {
             this.orderId = orderId;
             this.orderNumber = orderNumber;
             this.items = items;
@@ -105,6 +107,7 @@ public class OrderHistoryController {
             this.pickupTime = pickupTime;
             this.orderedAt = orderedAt;
             this.totalPrice = totalPrice;
+            this.notes = notes;
         }
 
         // Getters and Setters
@@ -134,6 +137,10 @@ public class OrderHistoryController {
 
         public String getOrderStatus() {
             return orderStatus;
+        }
+
+        public String getNotes() {
+            return notes;
         }
 
         public void setOrderStatus(String orderStatus) {

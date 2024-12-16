@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ntou.cs.XinfengStreetOrderSystem.entity.User;
+import ntou.cs.XinfengStreetOrderSystem.entity.User.OrderHistory;
 import ntou.cs.XinfengStreetOrderSystem.repository.MenuItemRepository;
 import ntou.cs.XinfengStreetOrderSystem.repository.UserRepository;
 
@@ -103,5 +104,23 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.getFavoriteItems().removeIf(item -> item.getMenuItemId().equals(menuItemId));
         userRepository.save(user);
+    }
+    // 更新訂單歷史
+    public void updateOrderHistory(String userId, String orderId) {
+        // 查找用戶
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // 創建新的訂單歷史
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setOrderId(orderId);  // 設定訂單 ID
+        orderHistory.setOrderedAt(new Date());  // 設定訂單時間為當前時間
+
+        // 加入新的訂單歷史到用戶的訂單歷史
+        user.getOrderHistory().add(orderHistory);
+
+        // 更新用戶資料
+        userRepository.save(user);
+        System.out.println("UpdateHistorySuccess:"+ userId);
     }
 }

@@ -48,7 +48,7 @@ h1 {
 }
 
 
-.order-date, .order-status ,.total-price{
+.order-date, .order-status ,.total-price,.pickup-date,.order-note{
     font-size: 16px;
     color: #d78f77;
     margin-top: 5px;

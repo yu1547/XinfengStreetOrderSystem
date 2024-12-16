@@ -1,20 +1,41 @@
 package ntou.cs.XinfengStreetOrderSystem.controller;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import ntou.cs.XinfengStreetOrderSystem.entity.Order;
+import ntou.cs.XinfengStreetOrderSystem.repository.OrderRepository;
+import ntou.cs.XinfengStreetOrderSystem.service.BusinessHoursService;
 import ntou.cs.XinfengStreetOrderSystem.service.OrderService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import ntou.cs.XinfengStreetOrderSystem.service.UserService;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
+    private final OrderRepository orderRepository;
+    private final UserService userService; 
+    private BusinessHoursService businessHoursService;
+    // 建構函數注入 OrderService 和 OrderRepository
+    @Autowired
+    public OrderController(OrderService orderService, OrderRepository orderRepository,UserService userService,BusinessHoursService businessHoursService) {
         this.orderService = orderService;
+        this.orderRepository = orderRepository;
+        this.userService = userService; 
+        this.businessHoursService= businessHoursService;
+        
     }
 
     // API 1: 查詢製作清單 (狀態為 accepted 的訂單)
@@ -82,6 +103,28 @@ public ResponseEntity<String> clearAllOrders() {
     public Order getOrderDetails(@PathVariable String orderId) {
         return orderService.getOrderById(orderId);
     }
+    // 提交訂單
+    @PostMapping
+    public ResponseEntity<String> submitOrder(@RequestBody Order order) {
+
+        // 假設有一個方法用來獲取當前用戶（例如從 session 或 JWT 中獲取用戶 ID）
+        String customerId = "673d00e1bfc8a66630f7e513";  // 替換為實際用戶 ID
+        order.setCustomerId(customerId);
+        order.setOrderNumber(orderService.getNextOrderNumber());
+        order.setStatusUpdatedAt(new Date());
+        order.setOrderStatus("待接受");
+        System.out.println("Order note: " + order.getNotes());
+        order = orderRepository.save(order);
+        // 確保訂單 ID 已經成功生成
+        String orderId = order.getId();
+
+        // 呼叫 UserService 更新訂單歷史
+        userService.updateOrderHistory(customerId, orderId);
+        
+        System.out.println("Order saved: " + orderId);  // 這行可以確認 order 是否被保存
+        return ResponseEntity.ok(orderId);
+
+        }
 
 }
 

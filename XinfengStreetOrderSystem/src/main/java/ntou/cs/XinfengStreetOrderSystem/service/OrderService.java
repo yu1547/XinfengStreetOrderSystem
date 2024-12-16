@@ -1,11 +1,12 @@
 package ntou.cs.XinfengStreetOrderSystem.service;
 
-import ntou.cs.XinfengStreetOrderSystem.entity.Order;
-import ntou.cs.XinfengStreetOrderSystem.repository.OrderRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import ntou.cs.XinfengStreetOrderSystem.entity.Order;
+import ntou.cs.XinfengStreetOrderSystem.repository.OrderRepository;
 
 @Service
 public class OrderService {
@@ -83,7 +84,11 @@ public Order getOrderById(String orderId) {
             .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
 }
 
-
+// 根據資料庫中的訂單數量生成下一個訂單號碼
+public int getNextOrderNumber() {
+    long count = orderRepository.count();  // 取得資料庫中的訂單數量
+    return (int) (count + 1);  // 生成新的訂單號碼，從 1 開始
+}
     // 其他方法...
 }
 

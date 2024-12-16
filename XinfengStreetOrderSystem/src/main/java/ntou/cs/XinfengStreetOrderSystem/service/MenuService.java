@@ -1,14 +1,15 @@
 package ntou.cs.XinfengStreetOrderSystem.service;
 
-import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
-import ntou.cs.XinfengStreetOrderSystem.repository.MenuItemRepository;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
+import ntou.cs.XinfengStreetOrderSystem.repository.MenuItemRepository;
 
 @Service
 public class MenuService {
@@ -105,5 +106,11 @@ public class MenuService {
 
     public MenuItem getMenuById(String id) {
         return menuItemRepository.findById(id).orElseThrow();
+    }
+    // 根據多個菜單項目的 ID 查詢菜單項目
+    public List<MenuItem> getMenuItemsByIds(List<String> menuItemIds) {
+        // 使用 menuItemIds 查詢菜單項目列表
+        List<MenuItem> menuItems = menuItemRepository.findAllById(menuItemIds);
+        return menuItems;
     }
 }

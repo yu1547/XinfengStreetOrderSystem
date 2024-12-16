@@ -1,16 +1,27 @@
 package ntou.cs.XinfengStreetOrderSystem.controller;
 
-import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
-import ntou.cs.XinfengStreetOrderSystem.exception.ResourceNotFoundException;
-import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
+import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
+import ntou.cs.XinfengStreetOrderSystem.exception.ResourceNotFoundException;
+import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -68,6 +79,22 @@ public class MenuController {
         }
     }
 
+    // 根據菜單項目 ID 列表查詢菜單項目
+    @PostMapping("/menuItems")
+    public ResponseEntity<List<MenuItem>> getMenuItemsByIds(@RequestBody Map<String, List<String>> request) {
+        // 確保請求體中有 "menuItemIds" 屬性
+        List<String> menuItemIds = request.get("menuItemIds");
+
+        if (menuItemIds == null || menuItemIds.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);  // 如果請求體中沒有menuItemIds，返回400
+        }
+
+        // 查詢菜單項目
+        List<MenuItem> menuItems = menuService.getMenuItemsByIds(menuItemIds);
+        return ResponseEntity.ok(menuItems);
+    }
+
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMenuItem(@PathVariable String id) {
         if (!menuService.existsById(id)) { // 檢查菜單項目是否存在
