@@ -163,29 +163,52 @@
       }
 
       function renderMeals(items) {
-        console.log(items);  // 查看返回的 order 物件
-        const mealsContainer = document.getElementById('meals');
-        mealsContainer.innerHTML = ''; // 清空現有餐點
+    console.log(items);  // 查看返回的 order 物件
+    const mealsContainer = document.getElementById('meals');
+    mealsContainer.innerHTML = ''; // 清空現有餐點
 
-        items.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${item.menuItemId}</td>
-            <td>${item.quantity} </td>
-            <td>
-              <div class="rating">
-                <input type="radio" id="star5-${item.menuItemId}" name="rating-${item.menuItemId}" value="5"><label for="star5-${item.menuItemId}">★</label>
-                <input type="radio" id="star4-${item.menuItemId}" name="rating-${item.menuItemId}" value="4"><label for="star4-${item.menuItemId}">★</label>
-                <input type="radio" id="star3-${item.menuItemId}" name="rating-${item.menuItemId}" value="3"><label for="star3-${item.menuItemId}">★</label>
-                <input type="radio" id="star2-${item.menuItemId}" name="rating-${item.menuItemId}" value="2"><label for="star2-${item.menuItemId}">★</label>
-                <input type="radio" id="star1-${item.menuItemId}" name="rating-${item.menuItemId}" value="1"><label for="star1-${item.menuItemId}">★</label>
-              </div>
-            </td>
-          `;
-          mealsContainer.appendChild(row);
+    items.forEach(item => {
+        const row = document.createElement('tr');
+
+        // 呼叫後端 API 來獲取餐點名稱
+        fetchMenuItemById(item.menuItemId)
+            .then(menuItemName => {
+                row.innerHTML = `
+                    <td>${menuItemName}</td>
+                    <td>${item.quantity}</td>
+                    <td>
+                        <div class="rating">
+                            <input type="radio" id="star5-${item.menuItemId}" name="rating-${item.menuItemId}" value="5"><label for="star5-${item.menuItemId}">★</label>
+                            <input type="radio" id="star4-${item.menuItemId}" name="rating-${item.menuItemId}" value="4"><label for="star4-${item.menuItemId}">★</label>
+                            <input type="radio" id="star3-${item.menuItemId}" name="rating-${item.menuItemId}" value="3"><label for="star3-${item.menuItemId}">★</label>
+                            <input type="radio" id="star2-${item.menuItemId}" name="rating-${item.menuItemId}" value="2"><label for="star2-${item.menuItemId}">★</label>
+                            <input type="radio" id="star1-${item.menuItemId}" name="rating-${item.menuItemId}" value="1"><label for="star1-${item.menuItemId}">★</label>
+                        </div>
+                    </td>
+                    <td style="display: none;" class="menu-item-id">${item.menuItemId}</td>  <!-- 隱藏的 menuItemId 欄位 -->
+                `;
+                mealsContainer.appendChild(row);  // 將新行添加到表格中
+            })
+            .catch(error => {
+                console.error("獲取餐點名稱錯誤:", error);
+            });
+    });
+}
+
+function fetchMenuItemById(menuItemId) {
+    return fetch(`http://localhost:8080/api/menu/id/${menuItemId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('無法獲取餐點資料');
+            }
+            return response.json();
+        })
+        .then(data => data.name)  // 返回菜單項目的名稱
+        .catch(error => {
+            console.error("獲取餐點名稱錯誤:", error);
+            return "未知餐點";  // 如果有錯誤，返回預設值
         });
-      }
-
+}
      // 提交評分函式
 // 提交評分函式
 function submitRatings() {
@@ -194,10 +217,10 @@ function submitRatings() {
 
     ratings.forEach((rating, index) => {
         const selectedInput = rating.querySelector("input:checked");
-        const menuItemId = document.querySelectorAll("tbody tr td:first-child")[index].textContent;  // 使用餐點的 menuItemId
+        const menuItemId = document.querySelectorAll("tbody tr td.menu-item-id")[index].textContent;  // 根據隱藏的 menuItemId 來獲取
 
         mealRatings.push({
-            menuItemId: menuItemId,  // 確保使用正確的 menuItemId
+            menuItemId: menuItemId,  // 使用隱藏欄位的 menuItemId
             rating: selectedInput ? selectedInput.value : "未評分", // 如果沒有選擇評分，則填入 "未評分"
         });
     });
@@ -227,6 +250,7 @@ function submitRatings() {
         alert("提交失敗，請稍後再試！");
     });
 }
+
 
     </script>
 </body>

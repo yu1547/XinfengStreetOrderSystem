@@ -77,7 +77,6 @@ public ResponseEntity<String> clearAllOrders() {
 }
 
 
-
     // 根據訂單 ID 獲取訂單詳細資料
     @GetMapping("/{orderId}")
     public Order getOrderDetails(@PathVariable String orderId) {
