@@ -1,14 +1,25 @@
 let currentCategory = ""; // 當前分類
 let fullMenuData = []; // 全部菜單資料，用於搜尋功能
-let customerId = "673d00e1bfc8a66630f7e513"; // 假設這是當前用戶的ID，可以從session中獲取
-let userId = "673d00e1bfc8a66630f7e513";//假設
+let userId = "673d00e1bfc8a66630f7e513";//測試先用
 
 // 初始載入
 document.addEventListener("DOMContentLoaded", () => {
     fetchCategories(); // 獲取分類
     fetchMenuData(""); // 預設加載全部菜單
-    //fetchFavoriteItems();
+    //fetchUserId() //有userId的時候fetch
 });
+
+/*有userId的時候用
+async function fetchUserId() {
+    try {
+        const response = await fetch("/api/user/id");
+        const userId = await response.text(); // 這裡假設返回的是 userId
+        console.log(userId);
+        // 現在可以使用 userId 進行後續操作
+    } catch (error) {
+        console.error("無法獲取用戶 ID:", error);
+    }
+}*/
 
 // 獲取分類並渲染按鈕
 async function fetchCategories() {
@@ -126,13 +137,16 @@ async function renderMenu(menuData) {
                         </div>
                         <p class="item-price">$${item.price}</p>
                     </div>
-                    <div class="quantity-control">
-                        <button onclick="changeQuantity(-1, 'quantity${index}')">-</button>
-                        <input type="text" value="0" id="quantity${index}" readonly>
-                        <button onclick="changeQuantity(1, 'quantity${index}')">+</button>
-                        <span class="error-message" id="error-quantity${index}">請選擇數量！</span>
+                    <div class="item-quantity-add-container">
+                        <div class="quantity-control">
+                            <button onclick="changeQuantity(-1, 'quantity${index}')">-</button>
+                            <input type="text" value="0" id="quantity${index}" readonly>
+                            <button onclick="changeQuantity(1, 'quantity${index}')">+</button>
+                            <span class="error-message" id="error-quantity${index}">請選擇數量！</span>
+                            <span class="success-message" id="success-quantity${index}" style="display: none;">成功加入！</span>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('${item.id}', 'quantity${index}')">加入</button>
                     </div>
-                    <button class="add-btn" onclick="addToCart('${item.id}', 'quantity${index}')">加入</button>
                     <div class="favorite-rating-group">
                         <button class="favorite-btn" id="favorite-btn-${item.id}" data-favorited="${item.isFavorited}" onclick="toggleFavorite(this, '${item.id}', '${item.name}')">
                             <i class="heart-icon"></i>
@@ -297,82 +311,6 @@ function changeQuantity(amount, quantityId) {
         currentQuantity = 0;
     }
     quantityInput.value = currentQuantity;
-    updateTotalPrice();
-}
-
-// 修改加入購物車函數，顯示錯誤提示
-function addToCart(itemId, quantityId) {
-    const quantityInput = document.getElementById(quantityId);
-    const quantity = parseInt(quantityInput.value);
-
-    // 取得錯誤訊息顯示區域
-    const errorMessageElement = document.getElementById(`error-${quantityId}`);
-
-    // 清除先前的錯誤訊息
-    if (errorMessageElement) {
-        errorMessageElement.style.display = "none";
-    }
-
-    if (quantity > 0) {
-        // 發送請求將商品加入購物車並更新後端資料
-        const orderItem = {
-            menuItemId: itemId,  // 商品的 id
-            quantity: quantity   // 選擇的數量
-        };
-        fetch(`/api/cart/${customerId}/add`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderItem)
-        })
-        .then(response => {
-            if (response.ok) {
-                alert(`已加入 ${quantity} 件商品至購物車 (商品ID: ${itemId})`);
-                quantityInput.value = 0;
-                updateTotalPrice(); // 重新計算並顯示總金額
-            } else {
-                alert("加入購物車失敗！");
-            }
-        })
-        .catch(error => {
-            console.error("無法加入購物車:", error);
-        });
-    } else {
-        // 顯示錯誤訊息
-        if (errorMessageElement) {
-            errorMessageElement.style.display = "block";
-        }
-    }
-}
-
-
-// 即時計算總金額
-function updateTotalPrice() {
-    let total = 0;
-    cartItems.forEach(item => {
-        total += item.quantity * item.price;
-    });
-
-    // 顯示總金額
-    document.getElementById("totalPrice").innerText = `總金額: $${total.toFixed(2)}`;
-
-    // 更新後端總金額（每次改變後端資料都同步更新）
-    fetch(`/api/cart/${customerId}/total`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ totalPrice: total })
-    })
-    .then(response => {
-        if (!response.ok) {
-            console.error("無法更新總金額至後端");
-        }
-    })
-    .catch(error => {
-        console.error("無法同步總金額至後端:", error);
-    });
 }
 
 function redirectToOrderPage() {
@@ -380,4 +318,72 @@ function redirectToOrderPage() {
 }
 
 document.getElementById('ordersBtn').addEventListener('click', redirectToOrderPage);
+
+const CART_SESSION_KEY = "cart";
+
+// 獲取購物車資料，若沒有則創建一個
+function getCart() {
+    let cart = JSON.parse(sessionStorage.getItem("cart"));
+
+    if (!cart) {
+        // 如果沒有購物車，創建新的購物車物件
+        cart = {
+            items: [],  // 初始化為空的購物車項目
+        };
+        sessionStorage.setItem("cart", JSON.stringify(cart));  // 存儲到 sessionStorage
+        console.log(JSON.parse(sessionStorage.getItem("cart")));
+    }
+    return cart;
+}
+
+// 合併加入購物車與更新數量的邏輯
+function addToCart(itemId, quantityId) {
+    const quantityInput = document.getElementById(quantityId);
+    const quantity = parseInt(quantityInput.value);  // 獲取數量
+    const errorElement = document.getElementById(`error-${quantityId}`);
+    const successElement = document.getElementById(`success-${quantityId}`);
+
+    if (errorElement) {
+        errorElement.style.display = "none";
+    }
+
+    if (quantity > 0) {
+        errorElement.style.display = "none";
+        // 獲取當前用戶的購物車，若無則初始化為空購物車
+        const cart = JSON.parse(sessionStorage.getItem("cart")) || { items: [] };
+
+        // 檢查這個菜品是否已經在購物車中
+        const existingItem = cart.items.find(cartItem => cartItem.menuItemId === itemId);
+        
+        if (existingItem) {
+            // 如果已經存在，更新數量
+            existingItem.quantity += quantity;
+        } else {
+            // 如果不存在，將品項新增到購物車
+            cart.items.push({
+                menuItemId: itemId,
+                quantity: quantity,
+            });
+        }
+
+        // 更新購物車至 sessionStorage
+        sessionStorage.setItem("cart", JSON.stringify(cart));
+        quantityInput.value = 0;
+
+        // 顯示成功訊息
+        successElement.style.display = "block";
+
+        // 兩秒後隱藏成功訊息
+        setTimeout(() => {
+            successElement.style.display = "none";
+        }, 2000);
+    } else {
+        if (errorElement) {
+            errorElement.style.display = "block";
+        }
+    }
+    console.log(JSON.parse(sessionStorage.getItem("cart")));
+}
+
+
 

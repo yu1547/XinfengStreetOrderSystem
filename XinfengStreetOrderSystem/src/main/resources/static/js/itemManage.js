@@ -49,18 +49,20 @@ function renderMenu(menuData) {
             
         <div class="menu-item" data-id="${item.id}">
             <div class="item-info">
-                <strong>${item.name}</strong>
-                <img src="${item.image}" alt="${item.name}" class="item-image">
-            </div>
-            <div class="item-details">
-                <div class="item-description-box">
-                    <p class="item-description">${item.description}</p>
+                <div class="item-name-image">
+                    <strong>${item.name}</strong>
+                    <img src="${item.image}" alt="${item.name}" class="item-image">
                 </div>
-                <p class="item-price">$${item.price}</p>
+                <div class="item-details">
+                    <div class="item-description-box">
+                        <p class="item-description">${item.description}</p>
+                    </div>
+                    <p class="item-price">$${item.price}</p>
+                </div>
             </div>
                 <button class="edit-btn" onclick="editMenuItem('${item.id}')">編輯</button>
                 <button class="delete-btn" onclick="deleteMenuItem('${item.id}')">刪除</button>
-            </div>`
+        </div>`
         )
         .join("");
 }

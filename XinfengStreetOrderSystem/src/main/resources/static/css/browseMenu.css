@@ -57,7 +57,7 @@ h1 {
     flex-direction: row;
     justify-content: space-between; /* 左右分開 */
     align-items: center; /* 垂直置中 */
-    padding: 15px 0; /* 上下內邊距 */
+    padding: 15px 10px; /* 上下內邊距 */
     border-bottom: 1px solid #eee; /* 底部邊框 */
     gap: 10px;
 }
@@ -74,8 +74,9 @@ h1 {
 .item-details {
     display: flex;
     align-items: center;
-    gap: 10px; /* 調整描述和價錢之間的距離 */
+    gap: 20px; /* 調整描述和價錢之間的距離 */
     margin-top: 5px;
+    margin-right: 10px;
 }
 
 .item-description-box {
@@ -105,13 +106,6 @@ h1 {
 
 /* 錯誤提示樣式 */
 .error-message {
-    color: red;                /* 錯誤訊息顯示為紅色 */
-    font-size: 14px;           /* 字體大小 */
-    margin-top: 5px;           /* 上邊距，讓錯誤訊息和數量框有點距離 */
-    font-weight: bold;         /* 加粗文字 */
-    display: none;             /* 預設為隱藏，只有在錯誤發生時才顯示 */
-}
-.error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
@@ -121,6 +115,27 @@ h1 {
     bottom: -20px;             /* 放置在數量框下方 */
     left: 0;
     right: 0;
+}
+
+/* 錯誤提示樣式 */
+.success-message {
+    color: rgba(255, 217, 0, 0.82);
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold;
+    display: none; /* 預設隱藏 */
+    position: absolute;        /* 絕對定位錯誤提示 */
+    bottom: -20px;             /* 放置在數量框下方 */
+    left: 0;
+    right: 0;
+}
+
+.item-quantity-add-container{
+    display: flex;
+    flex-direction: row; /* 水平排列 */
+    align-items: center; /* 垂直置中 */
+    gap: 5px; /* 元素間的間距 */
+    justify-content: flex-end; /* 靠右對齊 */
 }
 
 /* 數量控制樣式 */
@@ -185,17 +200,17 @@ h1 {
     height: 20px;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url('heart-outline.png'); /* 空心圖案 */
+    background-image: url('/images/heart-outline.png'); /* 空心圖案 */
     transition: background-image 0.3s ease;
     margin-bottom: 5px; /* 和評價間隔 */
 }
 
 .favorite-btn[data-favorited="true"] .heart-icon {
-    background-image: url('heart-filled.png'); /* 滿心圖案 */
+    background-image: url('/images/heart-filled.png'); /* 滿心圖案 */
 }
 
 .favorite-btn[data-favorited="false"] .heart-icon {
-    background-image: url('heart-outline.png');  /* 空心圖案 */
+    background-image: url('/images/heart-outline.png');  /* 空心圖案 */
 }
 
 /* 新的容器樣式，將愛心和評分放在一起 */
@@ -230,7 +245,7 @@ h1 {
     height: 16px; /* 星星圖案大小 */
     background-size: contain; /* 確保圖片比例正確 */
     background-repeat: no-repeat; /* 不重複顯示圖片 */
-    background-image: url('star.png'); /* 空心圖案 */
+    background-image: url('/images/star.png'); /* 空心圖案 */
     margin-left: 2px; /* 星星和數字之間的間隔 */
 }
 
@@ -259,8 +274,9 @@ h1 {
         box-shadow: none;
     }
     .menu-item {
-        flex-direction: row; /* 垂直排列 */
+        flex-direction: row; /* 平行排列 */
         align-items: flex-start;
+        padding-bottom: 5px;
     }
     .item-image {
         width: 100%;
@@ -274,9 +290,53 @@ h1 {
         max-width: 100%; /* 移動端全寬 */
     }
     .categories {
-        flex-direction: column;
+        flex-direction: row;
     }
     .order-btn {
-        width: 80%; 
+        width: 30%; 
     }
+
+    .item-description-box {
+        width: 80%;
+        max-height: none; /* 讓描述框高度不再限制 */
+    }
+
+    .favorite-rating-group {
+        width: auto;
+        margin-top: 5px; /* 調整間距 */
+    }
+
+    .rating-info {
+        font-size: 0.9em; /* 調整評價文字大小 */
+    }
+
+    .quantity-control button,
+    .quantity-control input {
+        font-size: 0.9em; /* 調整數量控制按鈕文字大小 */
+    }
+
+    .item-details {
+        flex-direction: column; /* 使數量和描述框垂直排列 */    
+        align-items: flex-start; /* 左對齊 */
+        gap: 1px;
+        width: 50%;
+    }
+
+    .item-quantity-add-container{
+        flex-direction: column; /* 垂直排列 */
+        gap: 20px; /* 增加間距 */
+    }
+
+    .quantity-control {
+        margin-right: 5px; /* 右邊距，增加與加入按鈕的間隔 */
+    }
+
+    .add-btn {
+        margin-right: 5px;
+    }
+
+    .favorite-rating-group {
+        margin-right: 5px;
+    }
+
 }

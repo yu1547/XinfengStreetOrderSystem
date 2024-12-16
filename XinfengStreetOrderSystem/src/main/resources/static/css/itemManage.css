@@ -8,7 +8,7 @@ body {
 }
 /* 容器樣式 */
 .container {
-    max-width: 600px; /* 最大寬度 */
+    max-width: 700px; /* 最大寬度 */
     margin: 0 auto; /* 自動左右邊距 */
     background-color: white; /* 背景顏色 */
     padding: 20px; /* 內邊距 */
@@ -65,9 +65,9 @@ h1 {
 /* 單個菜單項目樣式 */
 .menu-item {
     display: flex; /* 使用flexbox */
-    justify-content: space-between; /* 左右分開 */
+    justify-content: flex-start; /* 左右分開 */
     align-items: center; /* 垂直置中 */
-    padding: 20px 0; /* 上下內邊距 */
+    padding: 10px 20px; /* 上下內邊距 */
     border-bottom: 1px solid #eee; /* 底部邊框 */
     gap: 10px;
 }
@@ -77,8 +77,16 @@ h1 {
     text-align: left; /* 左對齊 */
     display: flex; /* 使用flexbox */
     align-items: center; /* 左對齊 */
-    justify-content: space-between; /* 增加間隔 */
-    margin-right: 20px; /* 右邊距，增加與編輯按鈕的間隔 */
+    justify-content: flex-start; /* 增加間隔 */
+    margin-right: 10px; /* 右邊距，增加與描述框的間隔 */
+    gap: 60px;
+}
+
+.item-name-image{
+    display: flex;
+    flex-direction: row; /* 水平排列 */
+    align-items: center; /* 垂直置中 */
+    gap: 60px; /* 元素間的間距 */
 }
 /* 圖片樣式 */
 .item-image {
@@ -92,8 +100,9 @@ h1 {
 .item-details {
     display: flex;
     align-items: center;
-    gap: 10px; /* 調整描述和價錢之間的距離 */
+    gap: 30px; /* 調整描述和價錢之間的距離 */
     margin-top: 5px;
+    margin-right: 10px;
 }
 
 .item-description-box {
@@ -164,7 +173,7 @@ h1 {
     }
 
     .menu-item {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
     }
 
@@ -174,28 +183,27 @@ h1 {
     }
 
     .item-info {
-        flex-direction: column;
+        flex-direction: row;
         margin-right: 0;
+    }
+
+    .item-name-image{
+        flex-direction: column; 
+        margin-right: 0;
+        gap:5px;
     }
 
     .item-details {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-start;
         gap: 10px; /* 調整描述和價錢之間的距離 */
         margin-top: 5px;
     }
     
     .item-description-box {
-        background-color: #f0f0f0; /* 淺灰背景 */
-        padding: 10px;
-        border-radius: 5px;
-        width: 100px; /* 固定描述框的寬度 */
-        max-height: 70px; /* 固定框高度，避免過高 */
-        overflow: hidden;
-        white-space: normal; /* 允許換行 */
-        word-wrap: break-word;
-        display: flex;
-        align-items: center;
+        width: 80px;
+        max-height: none; /* 讓描述框高度不再限制 */
     }
     
     .item-description {
@@ -210,21 +218,16 @@ h1 {
         font-size: 1em; /* 字體大小 */
     }
 
-    .button-group {
-        justify-content: center;
-    }
-
-    .new-item-btn {
-        width: 100%;
-        margin-bottom: 10px;
+    .edit-btn, .delete-btn {
+        align-items: center
     }
 
     .categories {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
     }
 
     .productList-btn {
-        width: 80%;
+        width: 50%;
     }
 }
