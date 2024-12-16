@@ -19,12 +19,13 @@ public class Order {
     private String orderStatus="pending";
     private Date pickupTime;
     private int orderNumber;
+    private String notes; // 新增的備註字段
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 
     private Date statusUpdatedAt=new Date();
 
     // Constructor, Getters and Setters
-    public Order(String customerId, List<OrderItem> items, double totalPrice, String orderStatus, Date pickupTime, int orderNumber, Date statusUpdatedAt) {
+    public Order(String customerId, List<OrderItem> items, double totalPrice, String orderStatus, Date pickupTime, int orderNumber, Date statusUpdatedAt, String notes) {
         this.customerId = customerId;
         this.items = items;
         this.totalPrice = totalPrice;
@@ -32,6 +33,8 @@ public class Order {
         this.pickupTime = pickupTime;
         this.orderNumber = orderNumber;
         this.statusUpdatedAt = statusUpdatedAt;
+        this.notes = notes;
+        
     }
 
     public static class OrderItem {
@@ -60,6 +63,15 @@ public class Order {
         }
         
     }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
 
     public String getId() {
         return id;
