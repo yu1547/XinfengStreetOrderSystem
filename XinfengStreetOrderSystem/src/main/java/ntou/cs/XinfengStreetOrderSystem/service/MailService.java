@@ -19,4 +19,14 @@ public class MailService {
         message.setText("您好，\n\n您的驗證碼是：" + verificationCode + "\n\n請於10分鐘內完成驗證。");
         mailSender.send(message);
     }
+
+
+    public void sendVerificationEmail2(String to, String messageContent) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("新豐街早餐店 <你的Gmail地址@gmail.com>"); // 指定寄件者名稱
+        message.setTo(to);
+        message.setSubject("新豐街早餐店 - 訂單通知");
+        message.setText("您好，\n\n" + messageContent + "\n\n謝謝您的支持！");
+        mailSender.send(message);
+    }
 }

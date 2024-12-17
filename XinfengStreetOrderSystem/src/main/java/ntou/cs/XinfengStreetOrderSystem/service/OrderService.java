@@ -4,17 +4,22 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
 import ntou.cs.XinfengStreetOrderSystem.entity.Order;
+import ntou.cs.XinfengStreetOrderSystem.entity.User;
 import ntou.cs.XinfengStreetOrderSystem.repository.OrderRepository;
+import ntou.cs.XinfengStreetOrderSystem.repository.UserRepository;
 
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final MailService mailService;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, MailService mailService) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.mailService = mailService;
     }
 
     // 查詢所有的訂單
@@ -27,7 +32,7 @@ public class OrderService {
         return orderRepository.findByOrderStatus("accepted");
     }
 
-    // 更新訂單狀態為完成
+    // 更新訂單狀態為完成並發送郵件通知
     public void completeOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
@@ -40,28 +45,39 @@ public class OrderService {
         order.setOrderStatus("completed");
         order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
+
+        // 通知客戶
+        notifyCustomer(order.getCustomerId(), "您的訂單已完成，請在三十分鐘內前來取餐!");
     }
 
-    // 接受訂單 (將訂單狀態更新為 accepted)
+    // 接受訂單並發送郵件通知
     public void acceptOrder(String orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
-
-        if (!order.getOrderStatus().equals("pending")) {
-            throw new IllegalArgumentException("訂單狀態不允許接受");
+        try {
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
+    
+            if (!order.getOrderStatus().equals("pending")) {
+                throw new IllegalArgumentException("訂單狀態不允許接受");
+            }
+    
+            order.setOrderStatus("accepted");
+            order.setStatusUpdatedAt(new Date()); // 更新時間
+            orderRepository.save(order);
+    
+            // 通知客戶
+            notifyCustomer(order.getCustomerId(), "您的訂單已被接受，將於完成後通知您!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("訂單接受失敗: " + e.getMessage());
         }
-
-        order.setOrderStatus("accepted");
-        order.setStatusUpdatedAt(new Date()); // 更新時間
-        orderRepository.save(order);
     }
+    
 
-    // 拒絕訂單 (將訂單狀態更新為 rejected)
+    // 拒絕訂單並發送郵件通知
     public void rejectOrder(String orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
 
-        // 訂單狀態可以是 "pending" 或 "accepted" 都可以進行拒絕
         if (!order.getOrderStatus().equals("pending") && !order.getOrderStatus().equals("accepted")) {
             throw new IllegalArgumentException("訂單狀態不允許拒絕");
         }
@@ -69,6 +85,22 @@ public class OrderService {
         order.setOrderStatus("rejected");
         order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
+
+        // 通知客戶
+        notifyCustomer(order.getCustomerId(), "您的訂單已被拒絕，請確認訂單內是否存在已售完的商品或是其他問題後再次送出訂單!");
+    }
+
+    // 根據customerId通知客戶
+    private void notifyCustomer(String customerId, String message) {
+        User user = userRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("用戶不存在"));
+
+        String email = user.getEmail();
+        if (email != null && !email.isEmpty()) {
+            mailService.sendVerificationEmail2(email, message);
+        } else {
+            throw new IllegalArgumentException("用戶沒有註冊電子郵件");
+        }
     }
 
     // 清除所有訂單
@@ -76,22 +108,16 @@ public class OrderService {
         orderRepository.deleteAll();
     }
 
+    // 根據訂單 ID 查詢訂單
+    public Order getOrderById(String orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
+    }
 
-
-   // 根據訂單 ID 查詢訂單
-public Order getOrderById(String orderId) {
-    return orderRepository.findById(orderId)
-            .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
-}
-
-// 根據資料庫中的訂單數量生成下一個訂單號碼
-public int getNextOrderNumber() {
-    long count = orderRepository.count();  // 取得資料庫中的訂單數量
-    return (int) (count + 1);  // 生成新的訂單號碼，從 1 開始
-}
+    // 根據資料庫中的訂單數量生成下一個訂單號碼
+    public int getNextOrderNumber() {
+        long count = orderRepository.count();  // 取得資料庫中的訂單數量
+        return (int) (count + 1);  // 生成新的訂單號碼，從 1 開始
+    }
     // 其他方法...
 }
-
-
-
-

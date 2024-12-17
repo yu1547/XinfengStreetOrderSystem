@@ -20,6 +20,9 @@ public interface UserRepository extends MongoRepository<User, String> {
     
     // 根據郵件查找
     Optional<User> findByEmail(String email);
+
+    // 根據 id 查找
+    Optional<User> findById(String id); 
     
     // 查詢收藏某菜單項的用戶
     @Query("{'favoriteItems.menuItemId': ?0}")

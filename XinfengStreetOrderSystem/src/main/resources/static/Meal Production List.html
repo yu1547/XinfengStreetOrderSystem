@@ -156,15 +156,17 @@ th, td {
     <script>
         // 渲染訂單清單
         async function renderOrders(orders) {
-    const orderList = document.getElementById('orders');
+            const orderList = document.getElementById('orders');
     orderList.innerHTML = '';
     let totalRevenue = 0;
-    
+
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0]; 
+    today.setHours(today.getHours() + 8); // 將當前時間加 8 小時
+    const todayStr = today.toISOString().split('T')[0]; // 獲取加時後的日期
 
     const todaysOrders = orders.filter(order => {
         const orderPickupDate = new Date(order.pickupTime);
+        orderPickupDate.setHours(orderPickupDate.getHours() + 8); // 訂單時間加 8 小時
         const orderPickupDateStr = orderPickupDate.toISOString().split('T')[0];
         return orderPickupDateStr === todayStr;
     });
