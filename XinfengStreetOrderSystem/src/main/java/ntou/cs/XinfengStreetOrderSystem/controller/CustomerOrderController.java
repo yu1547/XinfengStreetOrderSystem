@@ -63,4 +63,14 @@ public class CustomerOrderController {
             return ResponseEntity.notFound().build();
         }
     }
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
+    @GetMapping("/pickupTime/{id}")
+    public ResponseEntity<Date> getPickupTime(@PathVariable String id) {
+        Optional<Order> order = orderService.getOrderById(id);
+        if (order.isPresent()) {
+            return ResponseEntity.ok(order.get().getPickupTime());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
