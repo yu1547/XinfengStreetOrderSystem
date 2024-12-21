@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>點餐單</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="orders_styles.css">
+    <script src="js/orders_script.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="back-button">
+            <button id="backButton">返回</button>
+        </div>
+        <h1>點菜單</h1>
+        <div id="order-items-container">
+            <!-- 動態生成的點菜單項目將插入到這裡 -->
+        </div>
+        <div class="pickup-time">
+            <label for="pickup-date">取餐時間：</label><br>
+            <input type="text" id="pickup-date" placeholder="選擇日期">
+            <input type="time" id="pickup-time">
+        </div>
+
+        <div class="notes">
+            <label for="note">備註：</label><br>
+            <input type="text" id="note" placeholder="不要加洋蔥、蒜頭">
+        </div>
+
+        <div class="total">
+            <p id="total-amount">總金額：$0</p>
+        </div>
+
+        <div class="submit-btn">
+            <button id="submit-button">送出</button>
+        </div>
+    </div>
+</body>
+</html>

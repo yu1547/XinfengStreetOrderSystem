@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單狀態</title>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F4E1C1;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px; /* 調整最大寬度 */
+            width: 80%; /* 小螢幕自適應 */
+            margin: auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #6F2B2B;
+            margin-bottom: 20px;
+            padding: 10px;
+            display: inline-block;
+        }
+        p {
+            font-size: 1rem;
+            margin-top: 10px;
+            color: #6F2B2B;
+        }
+        .status {
+            font-size: 1.2rem;
+            color: blue;
+            margin-top: 20px;
+        }
+        .back-button {
+            padding: 0.5em 1em;
+            background-color: #6F2B2B;
+            color: white;
+            border: none;
+            border-radius: 5px; 
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+            max-width: 200px;
+            width: auto;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px; /* 減少內邊距 */
+                max-width: 90%; /* 在小螢幕上更窄 */
+            }
+            h1 {
+                font-size: 1.2rem;
+            }
+            p {
+                font-size: 0.9rem;
+            }
+            .back-button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>下單完成</h1>
+    <p>您的訂單號碼是：<span id="order-id"></span></p>
+    <p>預計取餐時間:<span id="pickup-time"></span></p>
+    <p class="status" id="order-status"></p>
+    <p>更新時間: <span id="order-status-time"></span></p>
+    <button class="back-button" onclick="goBack()">返回</button>
+</div>
+
+<script>
+    // 返回上一頁的函數
+    function goBack() {
+        window.location.href = "browseMenu.html"; // 替換為你的目標路徑
+    }
+
+    // 從 URL 取得訂單 ID
+    function getOrderIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id'); // 返回訂單 ID
+    }
+
+    // 定義輪詢函數
+    function pollOrderDetails(id) {
+        setInterval(() => {
+            // 請求最新的訂單號碼
+            fetch(`/Corder/number/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const orderIdElement = document.getElementById('order-id');
+                    if (orderIdElement) {
+                        orderIdElement.textContent = data; // 更新訂單號碼
+                    }
+                })
+                .catch(error => console.error("輪詢訂單號碼失敗：", error));
+
+            // 請求最新的訂單狀態
+            fetch(`/Corder/status/${id}`)
+                .then(response => response.text())
+                .then(data => {
+                    const statusElement = document.getElementById('order-status');
+                    if (statusElement) {
+                        statusElement.textContent = data; // 更新訂單狀態
+                    }
+                })
+            .catch(error => console.error("輪詢訂單狀態失敗：", error));
+            fetch(`/Corder/statusUpdatedAt/${id}`)
+            .then(response => response.text())
+            .then(data => {
+                const statustimeElement = document.getElementById('order-status-time');
+                console.log("收到的日期數據：", data);
+                if (statustimeElement) {
+                    // 手動解析日期字符串
+                    const isoDate = data.split('+')[0]; // 去除時區部分
+                    const momentObj = moment(isoDate, "YYYY-MM-DDTHH:mm:ss.SSS");
+                    if (momentObj.isValid()) {
+                        // 增加 8 小時
+                        const adjustedMomentObj = momentObj.add(8, 'hours');
+                        statustimeElement.textContent = adjustedMomentObj.format('YYYY-MM-DD HH:mm:ss'); // 更新訂單狀態時間
+                    } else {
+                        console.error("收到的日期格式無效：", data);
+                        statustimeElement.textContent = "Invalid date"; // 設置為無效日期
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("獲取訂單狀態時間失敗：", error);
+            });
+       fetch(`/Corder/pickupTime/${id}`)
+                .then(response => response.text())
+                .then(data => {
+                    const pickuptime = document.getElementById('pickup-time');
+                    console.log("收到的日期數據：", data);
+                    if (pickuptime ) {
+                        // 手動解析日期字符串
+                        const isoDate = data.split('+')[0]; // 去除時區部分
+                        const momentObj = moment(isoDate, "YYYY-MM-DDTHH:mm:ss.SSS");
+                        if (momentObj.isValid()) {
+                        const adjustedMomentObj2 = momentObj.add(8, 'hours');
+                        pickuptime.textContent = adjustedMomentObj2.format('YYYY-MM-DD HH:mm:ss');
+                        } else {
+                            console.error("收到的日期格式無效：", data);
+                            pickuptime .textContent = "Invalid date"; // 設置為無效日期
+                        }
+                    }
+                })
+                .catch(error => console.error("輪詢訂單更新時間失敗：", error));
+            
+        }, 2000); // 每 2 秒請求一次伺服器
+    }
+
+    // 當頁面加載時啟動輪詢
+    window.onload = function() {
+        const orderId = getOrderIdFromUrl();
+        if (orderId) {
+            pollOrderDetails(orderId); // 啟動輪詢
+        } else {
+            console.log("未找到訂單 ID");
+        }
+    };
+</script>
+
+</body>
+</html> 
