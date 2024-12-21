@@ -11,7 +11,7 @@ body {
     max-width: 700px; /* 最大寬度 */
     margin: 0 auto; /* 自動左右邊距 */
     background-color: white; /* 背景顏色 */
-    padding: 20px; /* 內邊距 */
+    padding: 30px; /* 內邊距 */
     border-radius: 10px; /* 圓角 */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
 }
@@ -87,6 +87,14 @@ h1 {
     flex-direction: row; /* 水平排列 */
     align-items: center; /* 垂直置中 */
     gap: 60px; /* 元素間的間距 */
+}
+
+.item-name-image strong {
+    display: block; /* 使名稱顯示為區塊元素，允許換行 */
+    width: 10ch; /* 設定寬度，8ch 約等於五個字（根據字形寬度調整） */
+    overflow-wrap: break-word; /* 遇到長字自動換行 */
+    word-wrap: break-word; /* 遇到長字自動換行 */
+    white-space: normal; /* 確保文字可以換行 */
 }
 /* 圖片樣式 */
 .item-image {
@@ -168,7 +176,7 @@ h1 {
 @media (max-width: 768px) {
     .container {
         max-width: 90%;
-        padding: 15px;
+        padding: 20px;
         box-shadow: none;
     }
 
@@ -185,6 +193,7 @@ h1 {
     .item-info {
         flex-direction: row;
         margin-right: 0;
+        gap: 30px;
     }
 
     .item-name-image{
@@ -197,7 +206,7 @@ h1 {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px; /* 調整描述和價錢之間的距離 */
+        gap: 5px; /* 調整描述和價錢之間的距離 */
         margin-top: 5px;
     }
     

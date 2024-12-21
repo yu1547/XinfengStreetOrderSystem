@@ -64,11 +64,18 @@ h1 {
 /* 菜單項目資訊樣式 */
 .item-info {
     flex-grow: 1; /* 佔據剩餘空間 */
-    text-align: left; /* 左對齊 */
     display: flex; /* 使用flexbox */
     align-items: center; /* 垂直置中 */
-    justify-content: space-between; /* 增加間隔 */
     margin-right: 20px; /* 右邊距，增加與加減按鈕的間隔 */
+    justify-content: space-between; /* 保證水平方向的對齊 */
+}
+
+.item-info strong {
+    display: block; /* 使名稱顯示為區塊元素，允許換行 */
+    width: 8ch; /* 設定寬度，8ch 約等於五個字（根據字形寬度調整） */
+    overflow-wrap: break-word; /* 遇到長字自動換行 */
+    word-wrap: break-word; /* 遇到長字自動換行 */
+    white-space: normal; /* 確保文字可以換行 */
 }
 
 .item-details {
@@ -220,6 +227,7 @@ h1 {
     align-items: center; /* 水平居中 */
     margin-top: 10px; /* 增加與其他元素的間距 */
     margin-right: 20px;
+    width: 60px;
 }
 
 /* 評價容器樣式 */
@@ -265,6 +273,8 @@ h1 {
     margin-left: 10px; /* 左邊距 */
     margin-right: 10px; /* 右邊距 */
     object-fit: cover; /* 使圖片保持比例，並填滿框 */
+    flex-shrink: 0; /* 防止圖片縮小 */
+    flex-grow: 0; /* 防止圖片增長 */
 }
 
 @media (max-width: 768px) {
@@ -285,6 +295,7 @@ h1 {
     .item-info {
         flex-direction: column; 
         margin-right: 0;
+        gap:5px;
     }
     .search-bar input {
         max-width: 100%; /* 移動端全寬 */
@@ -297,7 +308,7 @@ h1 {
     }
 
     .item-description-box {
-        width: 80%;
+        width: 80px;
         max-height: none; /* 讓描述框高度不再限制 */
     }
 

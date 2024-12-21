@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /*有userId的時候用
 async function fetchUserId() {
     try {
-        const response = await fetch("/api/user/id");
+        const response = await fetch("/api/users/user-id");
         const userId = await response.text(); // 這裡假設返回的是 userId
         console.log(userId);
         // 現在可以使用 userId 進行後續操作
@@ -314,10 +314,18 @@ function changeQuantity(amount, quantityId) {
 }
 
 function redirectToOrderPage() {
-    window.location.href = "orders.html";
+    const cart = getCart(); // 獲取購物車資料
+    if (cart.items.length === 0) {
+        // 如果購物車是空的，顯示警告提示
+        alert("未加入任何餐點入點菜單！");
+    } else {
+        // 購物車有商品，跳轉到 orders.html
+        window.location.href = "orders.html";
+    }
 }
 
 document.getElementById('ordersBtn').addEventListener('click', redirectToOrderPage);
+
 
 const CART_SESSION_KEY = "cart";
 
