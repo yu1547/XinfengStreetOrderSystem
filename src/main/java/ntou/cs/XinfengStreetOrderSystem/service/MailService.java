@@ -21,12 +21,12 @@ public class MailService {
     }
 
 
-    public void sendVerificationEmail2(String to, String messageContent) {
+    public void sendOrderNotificationEmail(String to, String messageContent) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("新豐街早餐店 <你的Gmail地址@gmail.com>"); // 指定寄件者名稱
+        message.setFrom("新豐街早餐店 <henhaobr1214@gmail.com>"); // 指定寄件者名稱
         message.setTo(to);
         message.setSubject("新豐街早餐店 - 訂單通知");
-        message.setText("您好，\n\n" + messageContent + "\n\n謝謝您的支持！");
+        message.setText("您好，\n\n" + messageContent + "\n\n謝謝您的支持！!!!!");
         mailSender.send(message);
     }
 }

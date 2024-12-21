@@ -51,4 +51,20 @@ public class MailController {
         }
         return ResponseEntity.badRequest().body("驗證失敗，請重新檢查驗證碼");
     }
+
+    // 發送訂單通知 API
+    @PostMapping("/sendOrderNotification")
+    public ResponseEntity<String> sendOrderNotification(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String orderDetails = payload.get("orderDetails");
+
+        // 設定郵件內容
+        String messageContent = "您好，\n\n您的訂單詳細資料如下：\n" + orderDetails + "\n\n謝謝您的支持！!   !";
+
+        // 發送訂單通知郵件
+        mailService.sendOrderNotificationEmail(email, messageContent);
+
+        return ResponseEntity.ok("訂單通知已寄出至：" + email);
+    }
 }
+

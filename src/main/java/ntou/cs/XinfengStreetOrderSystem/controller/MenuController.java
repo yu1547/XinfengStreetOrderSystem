@@ -23,7 +23,7 @@ import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
 import ntou.cs.XinfengStreetOrderSystem.exception.ResourceNotFoundException;
 import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/menu")
 public class MenuController {

@@ -232,7 +232,7 @@ th, td {
 
 
 function fetchMenuItemById(menuItemId) {
-    return fetch(`http://localhost:8080/api/menu/id/${menuItemId}`)
+    return fetch(`/api/menu/id/${menuItemId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('無法獲取餐點資料');

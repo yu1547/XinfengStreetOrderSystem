@@ -142,7 +142,7 @@
       });
 
       function fetchOrderDetails(orderId) {
-        fetch(`http://localhost:8080/orders/${orderId}`)
+        fetch(`/orders/${orderId}`)
           .then(response => {
             if (!response.ok) {
               throw new Error('獲取訂單詳細資料失敗');
@@ -196,7 +196,7 @@
 }
 
 function fetchMenuItemById(menuItemId) {
-    return fetch(`http://localhost:8080/api/menu/id/${menuItemId}`)
+    return fetch(`/api/menu/id/${menuItemId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('無法獲取餐點資料');
@@ -228,7 +228,7 @@ function submitRatings() {
     console.log("提交的評分資料：", mealRatings);
 
     // 發送評分資料
-    fetch('http://localhost:8080/rating/api/ratings', {
+    fetch('/rating/api/ratings', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

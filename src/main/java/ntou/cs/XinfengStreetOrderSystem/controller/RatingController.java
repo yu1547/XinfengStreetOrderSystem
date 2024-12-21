@@ -1,5 +1,6 @@
 package ntou.cs.XinfengStreetOrderSystem.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import ntou.cs.XinfengStreetOrderSystem.entity.Rating;
 import ntou.cs.XinfengStreetOrderSystem.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/rating")
 public class RatingController {

@@ -97,7 +97,7 @@ public class OrderService {
 
         String email = user.getEmail();
         if (email != null && !email.isEmpty()) {
-            mailService.sendVerificationEmail2(email, message);
+            mailService.sendOrderNotificationEmail(email, message);
         } else {
             throw new IllegalArgumentException("用戶沒有註冊電子郵件");
         }
