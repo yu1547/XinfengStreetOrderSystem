@@ -21,29 +21,31 @@ async function fetchUserId() {
     }
 }*/
 
-// 獲取分類並渲染按鈕
 async function fetchCategories() {
     try {
         const response = await fetch(`/api/menu/categories`);
         const categories = await response.json();
 
-        currentCategory = "favorites";
+        currentCategory = "favorites"; // 預設為收藏清單
 
         // 獲取用戶的收藏清單（Favorites）
         const favoritesResponse = await fetch(`/api/users/${userId}/favorites`);
         const favorites = await favoritesResponse.json();
-        
+
         // 假設我們使用 favorites 來顯示收藏清單的分類
         const categoriesContainer = document.getElementById("categoriesContainer");
 
         // 預設的“收藏清單”類別
-        categoriesContainer.innerHTML = `<span class="${currentCategory === "favorites" ? "active" : ""}" onclick="setActive(this, 'favorites')">收藏清單</span>` +
+        categoriesContainer.innerHTML =
+            `<span class="${currentCategory === "favorites" ? "active" : ""}" onclick="setActive(this, 'favorites')">收藏清單</span>` +
+            `<span class="${currentCategory === "套餐" ? "active" : ""}" onclick="setActive(this, '套餐')">套餐</span>` +
             categories
-            .map(
-                (category, index) =>
-                    `<span class="${category === currentCategory ? "active" : ""}" onclick="setActive(this, '${category}')">${category}</span>`
-            )
-            .join("");
+                .filter(category => category !== "套餐") // 確保 "套餐" 已在第二項
+                .map(
+                    (category) =>
+                        `<span class="${category === currentCategory ? "active" : ""}" onclick="setActive(this, '${category}')">${category}</span>`
+                )
+                .join("");
 
         // 儲存收藏清單，讓 fetchMenuData 使用
         if (favorites.length > 0) {
@@ -51,11 +53,11 @@ async function fetchCategories() {
         } else {
             fetchMenuData(currentCategory); // 沒有收藏清單時加載預設菜單
         }
-
     } catch (error) {
         console.error("無法獲取分類:", error);
     }
 }
+
 
 // 獲取用戶收藏的菜單項目並渲染
 async function fetchFavoriteItems() {
@@ -124,42 +126,68 @@ async function renderMenu(menuData) {
             // 獲取當前菜單項目的平均評分
             const averageRating = await fetchAverageRating(item.id);
             console.log(averageRating);
-
+            let packageDetailsHtml = "";
             return `
-                <div class="menu-item">
-                    <div class="item-info">
-                        <strong>${item.name}</strong>
-                        <img src="${item.image}" alt="${item.name}" class="item-image">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-description-box">
-                            <p class="item-description">${item.description}</p>
-                        </div>
-                        <p class="item-price">$${item.price}</p>
-                    </div>
-                    <div class="item-quantity-add-container">
-                        <div class="quantity-control">
-                            <button onclick="changeQuantity(-1, 'quantity${index}')">-</button>
-                            <input type="text" value="0" id="quantity${index}" readonly>
-                            <button onclick="changeQuantity(1, 'quantity${index}')">+</button>
-                            <span class="error-message" id="error-quantity${index}">請選擇數量！</span>
-                            <span class="success-message" id="success-quantity${index}" style="display: none;">成功加入！</span>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('${item.id}', 'quantity${index}')">加入</button>
-                    </div>
-                    <div class="favorite-rating-group">
-                        <button class="favorite-btn" id="favorite-btn-${item.id}" data-favorited="${item.isFavorited}" onclick="toggleFavorite(this, '${item.id}', '${item.name}')">
-                            <i class="heart-icon"></i>
-                        </button>
-                    
-                        <!-- 評分顯示 -->
-                        <div class="rating-info">
-                            <span id="rating-number-${item.id}">${averageRating === "N/A" ? "none" : averageRating}</span>
-                            <div id="star-${item.id}" class="star-icon"></div>
-                        </div>
-                    </div>    
+            <div class="menu-item" data-id="${item.id}">
+                <!-- 基本資訊 -->
+                <div class="item-info">
+                    <strong>${item.name}</strong>
+                    <img src="${item.image}" alt="${item.name}" class="item-image">
                 </div>
-            `;
+                <!-- 顯示套餐內容 -->
+                ${
+                    item.category === '套餐'
+                        ? `
+                            <div class="package-group">
+                                <button class="package-arrow" data-expanded="false" onclick="togglePackageDetails('${item.id}')">
+                                    <span class="arrow-icon"></span>
+                                </button>
+                                <div class="package-details" id="package-details-${item.id}">
+                                    <ul>
+                                        ${item.setContents
+                                            .split(/[\s,]+/)
+                                            .map(content => `<li>${content}</li>`)
+                                            .join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                        : ''
+                }
+        
+                <!-- 詳細內容 -->
+                <div class="item-details">
+                    <div class="item-description-box">
+                        <p class="item-description">${item.description}</p>
+                    </div>
+                    <p class="item-price">$${item.price}</p>
+                </div>
+        
+                <!-- 數量與加入購物車按鈕 -->
+                <div class="item-quantity-add-container">
+                    <div class="quantity-control">
+                        <button onclick="changeQuantity(-1, 'quantity${index}')">-</button>
+                        <input type="text" value="0" id="quantity${index}" readonly>
+                        <button onclick="changeQuantity(1, 'quantity${index}')">+</button>
+                        <span class="error-message" id="error-quantity${index}">請選擇數量！</span>
+                        <span class="success-message" id="success-quantity${index}" style="display: none;">成功加入！</span>
+                    </div>
+                    <button class="add-btn" onclick="addToCart('${item.id}', 'quantity${index}')">加入</button>
+                </div>
+        
+                <!-- 收藏與評分 -->
+                <div class="favorite-rating-group">
+                    <button class="favorite-btn" id="favorite-btn-${item.id}" data-favorited="${item.isFavorited}" onclick="toggleFavorite(this, '${item.id}', '${item.name}')">
+                        <i class="heart-icon"></i>
+                    </button>
+                    <div class="rating-info">
+                        <span id="rating-number-${item.id}">${averageRating === "N/A" ? "none" : averageRating}</span>
+                        <div id="star-${item.id}" class="star-icon"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
         })
     );
 
@@ -168,6 +196,24 @@ async function renderMenu(menuData) {
 
     // 渲染完畢後，檢查並更新收藏狀態
     await checkFavorites(menuData);
+
+    console.log("菜單內容已更新", menuContainer.innerHTML);
+}
+
+// 控制套餐內容顯示/隱藏
+function togglePackageDetails(itemId) {
+    const packageDetails = document.getElementById(`package-details-${itemId}`);
+    const arrowButton = document.querySelector(`.menu-item[data-id="${itemId}"] .package-arrow`);
+    console.log(arrowButton);
+    // 切換顯示/隱藏套餐內容
+    const isExpanded = arrowButton.getAttribute('data-expanded') === 'true';
+    if (isExpanded) {
+        packageDetails.style.display = 'none';
+        arrowButton.setAttribute('data-expanded', 'false');
+    } else {
+        packageDetails.style.display = 'block';
+        arrowButton.setAttribute('data-expanded', 'true');
+    }
 }
 
 //檢查常用菜單收藏狀況

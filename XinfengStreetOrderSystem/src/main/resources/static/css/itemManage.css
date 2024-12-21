@@ -74,22 +74,14 @@ h1 {
 /* 菜單項目資訊樣式 */
 .item-info {
     flex-grow: 1; /* 佔據剩餘空間 */
-    text-align: left; /* 左對齊 */
     display: flex; /* 使用flexbox */
     align-items: center; /* 左對齊 */
     justify-content: flex-start; /* 增加間隔 */
-    margin-right: 10px; /* 右邊距，增加與描述框的間隔 */
-    gap: 60px;
+    margin-right: 0; /* 右邊距，增加與描述框的間隔 */
+    gap: 50px;
 }
 
-.item-name-image{
-    display: flex;
-    flex-direction: row; /* 水平排列 */
-    align-items: center; /* 垂直置中 */
-    gap: 60px; /* 元素間的間距 */
-}
-
-.item-name-image strong {
+.item-info strong {
     display: block; /* 使名稱顯示為區塊元素，允許換行 */
     width: 10ch; /* 設定寬度，8ch 約等於五個字（根據字形寬度調整） */
     overflow-wrap: break-word; /* 遇到長字自動換行 */
@@ -105,19 +97,89 @@ h1 {
     object-fit: cover; /* 使圖片保持比例，並填滿框 */
 }
 
+.package-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.arrow-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #f9f9f9;
+    background-image: url('/images/down-arrow.png'); /* 預設的下箭頭圖案 */
+    transition: background-image 0.3s ease;
+}
+
+.package-arrow[data-expanded="true"] .arrow-icon {
+    background-image: url('/images/arrow-up.png'); /* 展開後的上箭頭圖案 */
+}
+
+.package-arrow[data-expanded="false"] .arrow-icon {
+    position: absolute; /* 絕對定位 */
+    top: 0; /* 距離容器頂部的間距 */
+    left: 0; /* 距離容器左側的間距 */
+    background-image: url('/images/down-arrow.png'); /* 收起時的下箭頭圖案 */
+}
+
+.package-details {
+    display: none; /* 預設隱藏內容 */
+    max-width: 90px; /* 設定最大寬度 */
+    flex-direction: column;
+    margin-top: 10px;
+    background-color: #f9f9f9; /* 背景顏色 */
+    border: none; /* 邊框 */
+    border-radius: 5px; /* 圓角 */
+    width: 80px; /* 最大寬度 */
+    margin-right: 10px; /* 置中 */
+}
+
+.package-details.visible {
+    display: block; /* 顯示內容 */
+}
+
+/* 修改套餐內容項目的字體顏色與大小 */
+.package-details ul {
+    list-style-type: none; /* 去掉項目的圓點符號 */
+    padding-left: 0; /* 去掉內邊距 */
+    font-size: 14px; /* 字體調小 */
+    color: #595454; /* 顏色設為淺灰 */
+}
+
+.package-details li {
+    margin-bottom: 5px; /* 每個套餐項目之間的間距 */
+}
+
+.package-group {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 讓箭頭和內容縱向排列 */
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 10px; /* 為箭頭留出空間 */
+    margin-right: 20px;
+}
+
 .item-details {
     display: flex;
     align-items: center;
     gap: 30px; /* 調整描述和價錢之間的距離 */
     margin-top: 5px;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .item-description-box {
     background-color: #f0f0f0; /* 淺灰背景 */
     padding: 10px;
     border-radius: 5px;
-    width: 100px; /* 固定描述框的寬度 */
+    width: 80px; /* 固定描述框的寬度 */
     max-height: 70px; /* 固定框高度，避免過高 */
     overflow: hidden;
     white-space: normal; /* 允許換行 */
