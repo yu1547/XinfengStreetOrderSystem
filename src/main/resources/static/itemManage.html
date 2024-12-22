@@ -8,10 +8,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>菜單管理</h1>
-
-        <!-- 按鈕群 -->
-        <div class="button-group">
+        <div class="menu-header">
+            <h1 class="menu-title">菜單管理</h1>
+            <button class="logout-button" id="logout-button">登出</button>
             <button class="new-item-btn">新增餐點</button> <!-- 新增餐點按鈕 -->
         </div>
 
@@ -27,7 +26,8 @@
 
         <button class="productList-btn" id="List-btn">餐點製作清單</button>
     </div>
-
+    <script src="js/logout.js"></script>
+    <script src="js/sessionCheck.js"></script>
     <script src="/js/itemManage.js"></script>
 </body>
 </html>

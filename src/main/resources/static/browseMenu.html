@@ -8,7 +8,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>菜單</h1>
+        <div class="menu-header">
+            <h1 class="menu-title">菜單</h1>
+            <button class="logout-button" id="logout-button">登出</button>
+        </div>
+
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="搜尋...">
         </div>
@@ -20,6 +24,7 @@
         </div>
         <button class="order-btn" id="ordersBtn">點菜單</button>
     </div>
+    <script src="js/logout.js"></script>
     <script src="js/sessionCheck.js"></script>
     <script src="js/browseMenu.js"></script>
 </body>

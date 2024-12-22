@@ -1,25 +1,33 @@
 let currentCategory = ""; // 當前分類
 let fullMenuData = []; // 全部菜單資料，用於搜尋功能
+
 let userId = "";
 
 // 初始載入
-document.addEventListener("DOMContentLoaded", () => {
-    fetchUserId() //有userId的時候fetch
-    fetchCategories(); // 獲取分類
-    fetchMenuData(""); // 預設加載全部菜單
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        await fetchUserId(); // 等待 fetchUserId 完成
+        fetchCategories(); // 獲取分類
+        fetchMenuData(currentCategory); // 預設加載全部菜單
+    } catch (error) {
+        console.error("初始化時出錯:", error);
+    }
 });
 
 
 async function fetchUserId() {
     try {
         const response = await fetch("/api/users/current-user");
-        const userId = await response.json; // 這裡假設返回的是 userId
-        console.log(userId);
-        // 現在可以使用 userId 進行後續操作
+        if (!response.ok) {
+            throw new Error("Failed to fetch user ID");
+        }
+        const data = await response.json(); // 假設 response.json() 返回的是 userId
+        userId = data.userId;
     } catch (error) {
         console.error("無法獲取用戶 ID:", error);
     }
 }
+
 
 async function fetchCategories() {
     try {
@@ -27,21 +35,24 @@ async function fetchCategories() {
         const categories = await response.json();
         console.log(categories);
         console.log(userId);
-        console.log(typeof userId);
-        // 預設分類為空字串
-        currentCategory = "";
 
         // 檢查用戶的收藏清單
         const favoritesResponse = await fetch(`/api/users/${userId}/favorites`);
         console.log(favoritesResponse);
         const favorites = await favoritesResponse.json();
 
+        // 預設分類為空字串
+        currentCategory = "";
+
         // 構建分類標籤
         const categoriesContainer = document.getElementById("categoriesContainer");
         let categoryHTML = "";
 
-        // 如果有收藏清單則顯示
+        // 如果有收藏清單且 "favorites" 不在分類中，則加入
         if (favorites.length > 0) {
+            if (!categories.includes("favorites")) {
+                categories.push("favorites"); // 如果收藏清單不存在，加入 "favorites" 到分類列表
+            }
             categoryHTML += `<span class="${currentCategory === "favorites" ? "active" : ""}" onclick="setActive(this, 'favorites')">收藏清單</span>`;
             currentCategory = "favorites"; // 預設為收藏清單
         }
@@ -52,9 +63,9 @@ async function fetchCategories() {
             if (!currentCategory) currentCategory = "套餐"; // 如果還沒選中分類，預設為「套餐」
         }
 
-        // 加載其他分類（過濾掉「套餐」）
+        // 加載其他分類（過濾掉「套餐」和「favorites」）
         categoryHTML += categories
-            .filter(category => category !== "套餐")
+            .filter(category => category !== "套餐" && category !== "favorites")
             .map(
                 category =>
                     `<span class="${currentCategory === category ? "active" : ""}" onclick="setActive(this, '${category}')">${category}</span>`
@@ -63,6 +74,7 @@ async function fetchCategories() {
 
         // 更新分類容器
         categoriesContainer.innerHTML = categoryHTML;
+        console.log(currentCategory);
 
         // 如果沒有任何分類預設一個
         if (!currentCategory && categories.length > 0) {
@@ -82,13 +94,14 @@ async function fetchCategories() {
 
 
 
+
 // 獲取用戶收藏的菜單項目並渲染
 async function fetchFavoriteItems() {
     try {
         // 獲取用戶的收藏項目 IDs
         const response = await fetch(`/api/users/${userId}/favorites`);
         const favoriteItems = await response.json();  // 假設返回的是 [{ menuItemId: 'id1' }, { menuItemId: 'id2' }, ...]
-
+        console.log(favoriteItems);
         if (favoriteItems.length > 0) {
             // 根據每個 menuItemId 獲取對應的菜單項目
             const menuItems = await Promise.all(favoriteItems.map(async (favoriteItem) => {
@@ -112,7 +125,7 @@ async function fetchFavoriteItems() {
 async function fetchMenuData(category) {
     try {
         let menuData;
-
+        console.log(category);
         if (category === "favorites") {
             // 如果是收藏清單，使用用戶的收藏資料
             const response = await fetch(`/api/users/${userId}/favorites`);
@@ -243,8 +256,10 @@ function togglePackageDetails(itemId) {
 async function checkFavorites(menuData) {
     try {
         // 假設有一個API可以獲取用戶的收藏
+        console.log(userId);
         const response = await fetch(`/api/users/${userId}/favorites`);
         const favorites = await response.json();
+        console.log("用戶收藏項目：", favorites);
 
         // 對每個菜單項目檢查是否已收藏
         menuData.forEach(item => {
@@ -253,9 +268,9 @@ async function checkFavorites(menuData) {
             //console.log(typeof favorites);
             //console.log(typeof item.id);
             const isFavorited = favorites.some(favorite => favorite.menuItemId === item.id);
-            //console.log(isFavorited);
+            console.log(isFavorited);
             const favoriteButton = document.querySelector(`#favorite-btn-${item.id}`);
-            //console.log(favoriteButton);
+            console.log(favoriteButton);
             if (favoriteButton) {
                 favoriteButton.setAttribute('data-favorited', isFavorited ? 'true' : 'false');
             }
@@ -326,19 +341,60 @@ async function fetchAverageRating(menuItemId) {
     }
 }
 
+async function fetchFavoriteItems() {
+    try {
+        // 獲取用戶的收藏項目 IDs
+        const response = await fetch(`/api/users/${userId}/favorites`);
+        const favoriteItems = await response.json();  // 假設返回的是 [{ menuItemId: 'id1' }, { menuItemId: 'id2' }, ...]
+        
+        if (favoriteItems.length === 0) {
+            alert("目前沒有收藏的餐點！");
+            // 清空菜單容器，顯示空收藏的訊息
+            const menuContainer = document.getElementById("menuContainer");
+            menuContainer.innerHTML = "<p>目前沒有收藏的餐點。</p>";
+            return; // 如果收藏清單為空，則不加載任何菜單
+        }
+
+        // 根據每個 menuItemId 獲取對應的菜單項目
+        const menuItems = await Promise.all(favoriteItems.map(async (favoriteItem) => {
+            const menuItemResponse = await fetch(`/api/menu/id/${favoriteItem.menuItemId}`);
+            const menuItem = await menuItemResponse.json();
+            return menuItem;
+        }));
+
+        // 渲染菜單項目
+        renderMenu(menuItems);
+        await checkFavorites(menuItems); // 檢查收藏狀態
+    } catch (error) {
+        console.error("獲取收藏菜單失敗:", error);
+    }
+}
+
 function setActive(element, category) {
     const categories = document.querySelectorAll('.categories span');
     categories.forEach(cat => cat.classList.remove('active'));
     element.classList.add('active');
     currentCategory = category;
+
     if (category === "favorites") {
-        // 點擊收藏清單時，重新拉取並渲染收藏的菜單
-        fetchFavoriteItems();
+        // 點擊收藏清單時，檢查收藏清單是否為空
+        fetch(`/api/users/${userId}/favorites`)
+            .then(response => response.json())
+            .then(favoriteItems => {
+                if (favoriteItems.length === 0) {
+                    alert("目前沒有收藏的餐點！");
+                    return; // 如果收藏清單為空，阻止進一步加載菜單
+                } else {
+                    fetchFavoriteItems(); // 加載收藏菜單
+                }
+            })
+            .catch(err => console.error('獲取收藏清單時發生錯誤:', err));
     } else {
         // 其他分類
         fetchMenuData(category);
     }
 }
+
 
 // 搜尋功能：只在按下 Enter 時觸發
 function searchMenu() {
@@ -461,6 +517,8 @@ function addToCart(itemId, quantityId) {
     }
     console.log(JSON.parse(sessionStorage.getItem("cart")));
 }
+
+
 
 
 

@@ -22,21 +22,48 @@ h1 {
     color:#6F2B2B;
 
 }
-/* 按鈕群組樣式 */
-.button-group {
-    display: flex; /* 使用flexbox */
-    justify-content: flex-end; /* 右對齊 */
-    margin-bottom: 20px; /* 下方邊距 */
+
+.menu-header {
+    display: flex; /* 啟用 flex 布局 */
+    justify-content: space-between; /* 左右兩端對齊 */
+    align-items: center; /* 垂直置中 */
+    padding: 10px; /* 內邊距，確保美觀 */
+    background-color: #ffffff; /* 背景顏色 */
+    margin-bottom: 25px;
 }
-/* 新增餐點按鈕樣式 */
-.new-item-btn {
-    background-color: #ccc; /* 背景顏色 */
+
+.menu-title {
+    margin: 0; /* 清除默認邊距 */
+    font-size: 24px; /* 設定標題字體大小 */
+    text-align: center; /* 標題居中 */
+    position: absolute; /* 絕對定位 */
+    left: 50%; /* 居中定位 */
+    transform: translateX(-50%); /* 使標題真正居中 */
+}
+
+.logout-button {
+    background-color: #CCC; /* 按鈕背景顏色 */
     color: black; /* 字體顏色 */
+    padding: 10px 10px; /* 內邊距 */
+    border-radius: 5px; /* 圓角 */
+    cursor: pointer; /* 鼠標樣式 */
+    border: none; /* 去掉邊框 */
+    transition: background-color 0.3s ease; /* 過渡效果 */
+}
+
+.logout-button:hover {
+    background-color: #848380; /* 滑鼠懸停時的顏色變化 */
+}
+
+.new-item-btn {
+    background-color: #6F2B2B; /* 背景顏色 */
+    color: #ffffff; /* 字體顏色 */
     padding: 10px 15px; /* 內邊距 */
     border-radius: 5px; /* 圓角 */
     cursor: pointer; /* 鼠標樣式 */
     border: none; /* 去掉邊框 */
 }
+
 /* 分類標籤樣式 */
 .categories {
     display: flex; /* 使用flexbox */
