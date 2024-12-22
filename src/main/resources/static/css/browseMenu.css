@@ -22,34 +22,48 @@ h1 {
 }
 
 .menu-header {
-    position: relative; /* 讓子元素可以使用絕對定位 */
-    display: flex;
-    justify-content: center; /* 標題居中 */
+    display: flex; /* 啟用 flex 布局 */
+    justify-content: space-between; /* 左右兩端對齊 */
     align-items: center; /* 垂直置中 */
     padding: 10px; /* 內邊距，確保美觀 */
     background-color: #ffffff; /* 背景顏色 */
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .menu-title {
     margin: 0; /* 清除默認邊距 */
     font-size: 24px; /* 設定標題字體大小 */
+    text-align: center; /* 標題居中 */
+    position: absolute; /* 絕對定位 */
+    left: 50%; /* 居中定位 */
+    transform: translateX(-50%); /* 使標題真正居中 */
 }
 
 .logout-button {
-    position: absolute; /* 絕對定位 */
-    right: 10px; /* 靠右邊距 */
     background-color: #CCC; /* 按鈕背景顏色 */
     color: black; /* 字體顏色 */
     padding: 10px 10px; /* 內邊距 */
     border-radius: 5px; /* 圓角 */
     cursor: pointer; /* 鼠標樣式 */
     border: none; /* 去掉邊框 */
-    transition: background-color 0.3s ease; /* 增加過渡效果 */
+    transition: background-color 0.3s ease; /* 過渡效果 */
 }
 
 .logout-button:hover {
     background-color: #848380; /* 滑鼠懸停時的顏色變化 */
+}
+
+.order-history-btn {
+    background-color: #6F2B2B; /* 背景顏色 */
+    color: #ffffff; /* 字體顏色 */
+    padding: 10px 15px; /* 內邊距 */
+    border-radius: 5px; /* 圓角 */
+    cursor: pointer; /* 鼠標樣式 */
+    border: none; /* 去掉邊框 */
+}
+
+.order-history-btn:hover {
+    background-color: #a04c2a; /* 懸停時顏色 */
 }
 
 /* 搜索欄樣式 */

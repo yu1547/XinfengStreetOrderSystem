@@ -451,6 +451,17 @@ function redirectToOrderPage() {
 
 document.getElementById('ordersBtn').addEventListener('click', redirectToOrderPage);
 
+document.addEventListener('DOMContentLoaded', function () {
+    const orderHistoryButton = document.getElementById('order-history-button'); // 取得訂單歷史按鈕
+    console.log(orderHistoryButton);
+    if (orderHistoryButton) {
+        orderHistoryButton.addEventListener('click', function () {
+            // 點擊後跳轉到 orderHistory.html
+            window.location.href = "OrderHistory.html";
+        });
+    }
+});
+
 
 const CART_SESSION_KEY = "cart";
 
