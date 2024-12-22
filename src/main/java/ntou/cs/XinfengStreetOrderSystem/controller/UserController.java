@@ -71,14 +71,13 @@ public class UserController {
     @GetMapping("/current-user")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         Object loggedInUser = session.getAttribute("loggedInUser");
-        
+
         if (loggedInUser != null) {
             return ResponseEntity.ok(Map.of("userId", loggedInUser));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("未登入");
         }
     }
-
 
     // 登出
     @PostMapping("/logout")
@@ -108,7 +107,7 @@ public class UserController {
     @GetMapping("/{userId}/favorites")
     public ResponseEntity<List<User.FavoriteItem>> getFavoriteItems(@PathVariable String userId) {
         try {
-            return ResponseEntity.ok(userService.getFavoriteItems(userId));
+            return ResponseEntity.ok(userService.getFavoriteItemsList(userId));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -117,7 +116,8 @@ public class UserController {
 
     // 加入收藏項目
     @PostMapping("/{userId}/favorites/add")
-    public ResponseEntity<Void> addFavoriteItem(@PathVariable String userId, @RequestBody User.FavoriteItem favoriteItem) {
+    public ResponseEntity<Void> addFavoriteItem(@PathVariable String userId,
+            @RequestBody User.FavoriteItem favoriteItem) {
         try {
             userService.addFavoriteItem(userId, favoriteItem);
             return ResponseEntity.ok().build();
