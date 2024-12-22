@@ -440,7 +440,7 @@ function changeQuantity(amount, quantityId) {
 
 function redirectToOrderPage() {
     const cart = getCart(); // 獲取購物車資料
-    if (cart.items.length === 0) {
+    if (cart.cart.length === 0) {
         // 如果購物車是空的，顯示警告提示
         alert("未加入任何餐點入點菜單！");
     } else {
@@ -471,10 +471,8 @@ function getCart() {
 
     if (!cart) {
         // 如果沒有購物車，創建新的購物車物件
-        cart = {
-            items: [],  // 初始化為空的購物車項目
-        };
-        sessionStorage.setItem("cart", JSON.stringify(cart));  // 存儲到 sessionStorage
+        cart = { cart: [] };  // 這裡的 cart 是物件，包含一個陣列
+        sessionStorage.setItem("cart", JSON.stringify(cart));
         console.log(JSON.parse(sessionStorage.getItem("cart")));
     }
     return cart;
@@ -494,11 +492,12 @@ function addToCart(itemId, quantityId) {
     if (quantity > 0) {
         errorElement.style.display = "none";
         // 獲取當前用戶的購物車，若無則初始化為空購物車
-        const cart = JSON.parse(sessionStorage.getItem("cart")) || { items: [] };
-
+        const cart = JSON.parse(sessionStorage.getItem("cart")) || { cart: [] };
+        console.log(cart);
         // 檢查這個菜品是否已經在購物車中
-        const existingItem = cart.items.find(cartItem => cartItem.menuItemId === itemId);
-        
+        console.log(cart.items);
+        const existingItem = cart.cart.find(cartItem => cartItem.menuItemId === itemId);
+        console.log(existingItem);
         if (existingItem) {
             // 如果已經存在，更新數量
             existingItem.quantity += quantity;
