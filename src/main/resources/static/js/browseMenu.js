@@ -1,62 +1,85 @@
 let currentCategory = ""; // 當前分類
 let fullMenuData = []; // 全部菜單資料，用於搜尋功能
-let userId = "673d00e1bfc8a66630f7e513";//測試先用
+let userId = "";
 
 // 初始載入
 document.addEventListener("DOMContentLoaded", () => {
+    fetchUserId() //有userId的時候fetch
     fetchCategories(); // 獲取分類
     fetchMenuData(""); // 預設加載全部菜單
-    //fetchUserId() //有userId的時候fetch
 });
 
-/*有userId的時候用
+
 async function fetchUserId() {
     try {
-        const response = await fetch("/api/users/user-id");
-        const userId = await response.text(); // 這裡假設返回的是 userId
+        const response = await fetch("/api/users/current-user");
+        const userId = await response.json; // 這裡假設返回的是 userId
         console.log(userId);
         // 現在可以使用 userId 進行後續操作
     } catch (error) {
         console.error("無法獲取用戶 ID:", error);
     }
-}*/
+}
 
 async function fetchCategories() {
     try {
         const response = await fetch(`/api/menu/categories`);
         const categories = await response.json();
+        console.log(categories);
+        console.log(userId);
+        console.log(typeof userId);
+        // 預設分類為空字串
+        currentCategory = "";
 
-        currentCategory = "favorites"; // 預設為收藏清單
-
-        // 獲取用戶的收藏清單（Favorites）
+        // 檢查用戶的收藏清單
         const favoritesResponse = await fetch(`/api/users/${userId}/favorites`);
+        console.log(favoritesResponse);
         const favorites = await favoritesResponse.json();
 
-        // 假設我們使用 favorites 來顯示收藏清單的分類
+        // 構建分類標籤
         const categoriesContainer = document.getElementById("categoriesContainer");
+        let categoryHTML = "";
 
-        // 預設的“收藏清單”類別
-        categoriesContainer.innerHTML =
-            `<span class="${currentCategory === "favorites" ? "active" : ""}" onclick="setActive(this, 'favorites')">收藏清單</span>` +
-            `<span class="${currentCategory === "套餐" ? "active" : ""}" onclick="setActive(this, '套餐')">套餐</span>` +
-            categories
-                .filter(category => category !== "套餐") // 確保 "套餐" 已在第二項
-                .map(
-                    (category) =>
-                        `<span class="${category === currentCategory ? "active" : ""}" onclick="setActive(this, '${category}')">${category}</span>`
-                )
-                .join("");
-
-        // 儲存收藏清單，讓 fetchMenuData 使用
+        // 如果有收藏清單則顯示
         if (favorites.length > 0) {
+            categoryHTML += `<span class="${currentCategory === "favorites" ? "active" : ""}" onclick="setActive(this, 'favorites')">收藏清單</span>`;
+            currentCategory = "favorites"; // 預設為收藏清單
+        }
+
+        // 如果有「套餐」分類則顯示
+        if (categories.includes("套餐")) {
+            categoryHTML += `<span class="${currentCategory === "套餐" ? "active" : ""}" onclick="setActive(this, '套餐')">套餐</span>`;
+            if (!currentCategory) currentCategory = "套餐"; // 如果還沒選中分類，預設為「套餐」
+        }
+
+        // 加載其他分類（過濾掉「套餐」）
+        categoryHTML += categories
+            .filter(category => category !== "套餐")
+            .map(
+                category =>
+                    `<span class="${currentCategory === category ? "active" : ""}" onclick="setActive(this, '${category}')">${category}</span>`
+            )
+            .join("");
+
+        // 更新分類容器
+        categoriesContainer.innerHTML = categoryHTML;
+
+        // 如果沒有任何分類預設一個
+        if (!currentCategory && categories.length > 0) {
+            currentCategory = categories[0];
+        }
+
+        // 根據當前分類加載菜單
+        if (currentCategory === "favorites") {
             fetchFavoriteItems();
         } else {
-            fetchMenuData(currentCategory); // 沒有收藏清單時加載預設菜單
+            fetchMenuData(currentCategory);
         }
     } catch (error) {
         console.error("無法獲取分類:", error);
     }
 }
+
 
 
 // 獲取用戶收藏的菜單項目並渲染
@@ -197,7 +220,7 @@ async function renderMenu(menuData) {
     // 渲染完畢後，檢查並更新收藏狀態
     await checkFavorites(menuData);
 
-    console.log("菜單內容已更新", menuContainer.innerHTML);
+    //console.log("菜單內容已更新", menuContainer.innerHTML);
 }
 
 // 控制套餐內容顯示/隱藏

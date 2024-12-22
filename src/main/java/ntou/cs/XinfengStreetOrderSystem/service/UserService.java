@@ -1,9 +1,11 @@
 package ntou.cs.XinfengStreetOrderSystem.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,17 +51,24 @@ public class UserService {
         if (passwordEncoder.matches(password, user.getPassword())) {
             return user;
         }
-        
+
         return null;
     }
-    
 
     // Registration logic
     public boolean register(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return false;
         }
-        //role分配
+
+        // 初始化空集合
+        if (user.getFavoriteItems() == null) {
+            user.setFavoriteItems(new ArrayList<>());
+        }
+        if (user.getOrderHistory() == null) {
+            user.setOrderHistory(new ArrayList<>());
+        }
+        // role分配
         if (user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("customer");
         }
@@ -82,8 +91,12 @@ public class UserService {
     }
 
     // Get all favorite items for a user
-    public List<User.FavoriteItem> getFavoriteItems(String userId) {
+    public List<User.FavoriteItem> getFavoriteItemsList(String userId) {
+        System.out.println("back userId: " + userId);
         Optional<User> user = userRepository.findById(userId);
+        System.out.println(userRepository.findById(userId));
+        System.out.println("User: " + user);
+        System.out.println("User: " + user.isPresent());
         if (user.isPresent()) {
             return user.get().getFavoriteItems();
         } else {
@@ -124,22 +137,23 @@ public class UserService {
         user.getFavoriteItems().removeIf(item -> item.getMenuItemId().equals(menuItemId));
         userRepository.save(user);
     }
+
     // 更新訂單歷史
-        public void updateOrderHistory(String userId, String orderId) {
+    public void updateOrderHistory(String userId, String orderId) {
         // 查找用戶
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 創建新的訂單歷史
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setOrderId(orderId);  // 設定訂單 ID
-        orderHistory.setOrderedAt(new Date());  // 設定訂單時間為當前時間
+        orderHistory.setOrderId(orderId); // 設定訂單 ID
+        orderHistory.setOrderedAt(new Date()); // 設定訂單時間為當前時間
 
         // 加入新的訂單歷史到用戶的訂單歷史
         user.getOrderHistory().add(orderHistory);
 
         // 更新用戶資料
         userRepository.save(user);
-        System.out.println("UpdateHistorySuccess:"+ userId);
+        System.out.println("UpdateHistorySuccess:" + userId);
     }
 }
