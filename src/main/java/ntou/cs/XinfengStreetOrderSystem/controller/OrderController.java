@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import ntou.cs.XinfengStreetOrderSystem.entity.Order;
 import ntou.cs.XinfengStreetOrderSystem.repository.OrderRepository;
 import ntou.cs.XinfengStreetOrderSystem.service.BusinessHoursService;
@@ -106,10 +108,11 @@ public ResponseEntity<String> clearAllOrders() {
     }
     // 提交訂單
     @PostMapping
-    public ResponseEntity<String> submitOrder(@RequestBody Order order) {
+    public ResponseEntity<String> submitOrder(@RequestBody Order order,HttpSession session) {
+        // 從 session 中獲取當前用戶的 ID 
+        String customerId = (String) session.getAttribute("loggedInUser");
+        if (customerId == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶未登入");}
 
-        // 假設有一個方法用來獲取當前用戶（例如從 session 或 JWT 中獲取用戶 ID）
-        String customerId = "673d00e1bfc8a66630f7e513";  // 替換為實際用戶 ID
         order.setCustomerId(customerId);
         order.setOrderNumber(orderService.getNextOrderNumber());
         order.setStatusUpdatedAt(new Date());

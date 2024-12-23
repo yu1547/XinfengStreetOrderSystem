@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
 import ntou.cs.XinfengStreetOrderSystem.entity.Order;
 import ntou.cs.XinfengStreetOrderSystem.entity.User;
@@ -33,8 +33,14 @@ public class OrderHistoryController {
     @Autowired
     private MenuItemRepository menuItemRepository;  // 用來查詢 MenuItem
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<OrderDetails>> getOrderHistory(@PathVariable String userId) {
+    @GetMapping
+    public ResponseEntity<List<OrderDetails>> getOrderHistory(HttpSession session) {
+        // 從 session 中獲取當前用戶的 ID
+        String userId = (String) session.getAttribute("loggedInUser");
+        if (userId == null) {
+            return ResponseEntity.status(401).build(); // 未登入，返回 401 狀態
+        }
+        
         System.out.println("Request received for userId: " + userId);
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
@@ -143,6 +149,10 @@ public class OrderHistoryController {
             return notes;
         }
 
+        public void setNotes(String notes) {
+            this.notes = notes;
+        }
+
         public void setOrderStatus(String orderStatus) {
             this.orderStatus = orderStatus;
         }
@@ -170,6 +180,7 @@ public class OrderHistoryController {
         public void setTotalPrice(double totalPrice) {
             this.totalPrice = totalPrice;
         }
+
     }
 
     public static class OrderItemDetails {

@@ -1,24 +1,30 @@
 $(document).ready(function () {
 
-    //  //--------------測試用，後續刪除-------------
-    // // 直接將測試的 userId 設置在 sessionStorage 中
-    sessionStorage.setItem("userId", "673d00e1bfc8a66630f7e513"); // 設置測試用的 userId
-    // //--------------測試用，後續刪除-------------
+    // //  //--------------測試用，後續刪除-------------
+    // // // 直接將測試的 userId 設置在 sessionStorage 中
+    // sessionStorage.setItem("userId", "673d00e1bfc8a66630f7e513"); // 設置測試用的 userId
+    // // //--------------測試用，後續刪除-------------
 
-    const userId = sessionStorage.getItem("userId"); // 假設 userId 是儲存在 sessionStorage 中
+    // const userId = sessionStorage.getItem("userId"); // 假設 userId 是儲存在 sessionStorage 中
 
     function fetchOrderHistory() {
         $.ajax({
-            url: `/api/orderHistory/${userId}`,
+            url: '/api/orderHistory',  // 不再傳入 userId
             method: 'GET',
             success: function (data) {
                 renderOrderHistory(data);
             },
             error: function (error) {
                 console.error('Error fetching order history:', error);
+    
+                if (error.status === 401) {
+                    // 如果收到 401 未授權，跳轉到登入頁面
+                    window.location.href = 'login.html';
+                }
             }
         });
     }
+
     
     function renderOrderHistory(orders) {
         const container = $('#order-history-container');

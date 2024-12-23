@@ -1,25 +1,23 @@
-// 獲取客戶 ID
-const customerId = "TestID"; // 替換為實際的客戶 ID
 // 定義全域變數 businessHours
 let businessHours = null;
 $(document).ready(function() {
-    // 測試用代碼：將測試的 cart 存入 sessionStorage，日後刪除
-    // ---------測試用代碼 (開始)--------
-    const testCart = {
-        cart: [
-        {
-            menuItemId: "675dec118a90d51a011f6308",
-            quantity: 2
-        },
-        {
-            menuItemId: "675dec798a90d51a011f6309",
-            quantity: 1
-        }
-        ]
-    };
-    sessionStorage.setItem('cart', JSON.stringify(testCart));
-    console.log('測試用 cart 已存入 sessionStorage：', testCart);
-    // ---------測試用代碼 (結束)--------
+    // // 測試用代碼：將測試的 cart 存入 sessionStorage，日後刪除
+    // // ---------測試用代碼 (開始)--------
+    // const testCart = {
+    //     cart: [
+    //     {
+    //         menuItemId: "675dec118a90d51a011f6308",
+    //         quantity: 2
+    //     },
+    //     {
+    //         menuItemId: "675dec798a90d51a011f6309",
+    //         quantity: 1
+    //     }
+    //     ]
+    // };
+    // sessionStorage.setItem('cart', JSON.stringify(testCart));
+    // console.log('測試用 cart 已存入 sessionStorage：', testCart);
+    // // ---------測試用代碼 (結束)--------
     
     // 從後端取得營業時間並儲存到全域變數
     $.ajax({
@@ -30,7 +28,12 @@ $(document).ready(function() {
             console.log('營業時間資料：', businessHours); // 可以檢查一下返回的資料
         },
         error: function(error) {
-            alert("無法獲取營業時間資料");
+            if (error.status === 401) { // 如果收到 401 未授權，跳轉到登入頁面 
+                window.location.href = 'login.html'; 
+            } 
+            else { 
+                alert("無法獲取營業時間資料");
+            }
         }
     });
 
@@ -58,6 +61,7 @@ function loadOrderItems() {
     const cart = JSON.parse(sessionStorage.getItem('cart'));
     if (!cart || !cart.cart || cart.cart.length === 0) {
         alert("購物車是空的！");
+        window.location.href = 'browseMenu.html';
         return;
     }
 
