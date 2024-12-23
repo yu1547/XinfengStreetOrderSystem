@@ -495,7 +495,6 @@ function addToCart(itemId, quantityId) {
         const cart = JSON.parse(sessionStorage.getItem("cart")) || { cart: [] };
         console.log(cart);
         // 檢查這個菜品是否已經在購物車中
-        console.log(cart.items);
         const existingItem = cart.cart.find(cartItem => cartItem.menuItemId === itemId);
         console.log(existingItem);
         if (existingItem) {
@@ -503,7 +502,7 @@ function addToCart(itemId, quantityId) {
             existingItem.quantity += quantity;
         } else {
             // 如果不存在，將品項新增到購物車
-            cart.items.push({
+            cart.cart.push({
                 menuItemId: itemId,
                 quantity: quantity,
             });
