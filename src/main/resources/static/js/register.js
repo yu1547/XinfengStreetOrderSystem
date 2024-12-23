@@ -43,6 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
+            // 檢查帳號是否存在
+            const checkResponse = await fetch(`/api/users/check-username?username=${encodeURIComponent(username)}`, {
+                method: 'GET',
+            });
+
+            const isUsernameTaken = await checkResponse.json();
+
+            if (isUsernameTaken) {
+                alert('帳號已存在，請使用其他帳號！');
+                return;
+            }
+
             // 禁用按鈕並顯示提示
             registerBtn.disabled = true;
             messageDisplay.textContent = '寄送驗證碼至您的信箱中，請稍後...';
@@ -61,83 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 registerBtn.disabled = false;
             }
         } catch (error) {
-            console.error('Error sending verification code:', error);
+            console.error('Error checking username or sending verification code:', error);
             messageDisplay.textContent = '發送驗證碼時發生錯誤，請稍後再試。';
             registerBtn.disabled = false;
-        }
-    });
-
-    // 驗證碼驗證事件
-    verifyCodeBtn.addEventListener('click', async function() {
-        const verificationCode = verificationCodeInput.value.trim();
-
-        if (!verificationCode) {
-            alert('請輸入驗證碼');
-            return;
-        }
-
-        try {
-            const verifyResponse = await fetch('/api/mail/verifyCode', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, verificationCode })
-            });
-
-            if (verifyResponse.ok) {
-                messageDisplay.textContent = '驗證成功，正在完成註冊...';
-
-                // 提交註冊資訊
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value.trim();
-                const name = document.getElementById('name').value.trim();
-                const age = document.getElementById('age').value.trim();
-                const gender = document.querySelector('input[name="gender"]:checked').value;
-
-                const registerResponse = await fetch('/api/users/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        email,
-                        username,
-                        password,
-                        name,
-                        age,
-                        gender
-                    })
-                });
-
-                if (registerResponse.ok) {
-                    alert('註冊成功！即將跳轉到登入頁面...');
-                    window.location.href = '/login.html';
-                } else {
-                    messageDisplay.textContent = '註冊失敗，請稍後再試。';
-                }
-            } else {
-                messageDisplay.textContent = '驗證碼錯誤，請重新輸入';
-            }
-        } catch (error) {
-            console.error('Error verifying code or registering:', error);
-            messageDisplay.textContent = '發生錯誤，請稍後再試。';
-        }
-    });
-
-    // 重新寄送驗證碼事件
-    resendCodeBtn.addEventListener('click', async function() {
-        try {
-            messageDisplay.textContent = '重新寄送驗證碼中，請稍後...';
-
-            const response = await fetch(`/api/mail/sendVerificationCode?email=${encodeURIComponent(email)}`, {
-                method: 'POST'
-            });
-
-            if (response.ok) {
-                messageDisplay.textContent = '驗證碼已重新寄送至您的信箱，請檢查郵件。';
-            } else {
-                messageDisplay.textContent = '重新寄送驗證碼失敗，請稍後再試。';
-            }
-        } catch (error) {
-            console.error('Error resending verification code:', error);
-            messageDisplay.textContent = '發送錯誤，請稍後再試。';
         }
     });
 
