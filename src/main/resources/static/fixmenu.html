@@ -243,7 +243,7 @@ document.getElementById('menuForm').addEventListener('submit', function (e) {
     })
     .then(data => {
         alert(isEditing ? '菜單更新成功！' : '新增菜單成功！');
-        window.location.href = 'browseMenu.html';
+        window.location.href = 'itemManage.html';
     })
     .catch(error => {
         console.error('錯誤：', error);
