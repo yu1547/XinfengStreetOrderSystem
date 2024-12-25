@@ -322,8 +322,6 @@ function submitOrder() {
         success: function(response) {
             console.log("後端回應：", response); // 確認後端返回的內容
             alert("訂單提交成功！");
-            // 跳轉到 state.html，帶上 orderID 作為網址參數
-            sessionStorage.clear();
             window.location.href = `state.html?id=${response}`;
         },
         error: function(xhr, status, error) {
