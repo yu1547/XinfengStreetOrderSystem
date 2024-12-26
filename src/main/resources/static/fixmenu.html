@@ -253,8 +253,9 @@ if (isEditing) {
 document.getElementById('menuForm').addEventListener('submit', function (e) {
     e.preventDefault();  // 防止表單提交
     const imageUrl = document.getElementById('imageUrl').value;
+
     if (!imageUrl) {
-        alert('請上傳圖');
+        alert('請上傳圖片');
         return; // 停止表單提交
     }
     
