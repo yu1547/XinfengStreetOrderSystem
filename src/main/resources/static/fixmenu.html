@@ -119,6 +119,7 @@
     <h1>菜單管理</h1>
     <form id="menuForm">
         <input type="hidden" id="menuId" name="menuId">
+        <input type="hidden" id="imageUrl" name="imageUrl"> 
         
         <!-- 圖片上傳 -->
         <div class="form-group">
@@ -170,7 +171,7 @@
 </div>
 <script src="js/sessionCheck.js"></script>
 <script>
-
+// 圖片上傳功能
 // 圖片上傳功能
 document.querySelector('.photo-upload').addEventListener('click', function () {
     document.querySelector('#image').click();
@@ -179,16 +180,32 @@ document.querySelector('.photo-upload').addEventListener('click', function () {
 document.querySelector('#image').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'breakfast'); // Cloudinary 設定的 upload preset
+
+        fetch('https://api.cloudinary.com/v1_1/db6ov5ugz/image/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            const imageUrl = data.secure_url; // Cloudinary 返回的圖片 URL
             const previewImage = document.querySelector('#previewImage');
-            previewImage.src = event.target.result;
+            previewImage.src = imageUrl;
             previewImage.style.display = 'block';
             document.querySelector('.photo-upload span').style.display = 'none';
-        };
-        reader.readAsDataURL(file);
+
+            // 儲存圖片 URL 到隱藏的 input 中
+            document.getElementById('imageUrl').value = imageUrl;
+        })
+        .catch(error => {
+            console.error('圖片上傳錯誤：', error);
+            alert('圖片上傳失敗');
+        });
     }
 });
+
 
 // 獲取 URL 中的菜單 ID
 const menuId = new URLSearchParams(window.location.search).get('id');
@@ -231,6 +248,15 @@ if (isEditing) {
 document.getElementById('menuForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
+
+    // 檢查圖片是否已上傳
+    const imageUrl = document.getElementById('imageUrl').value;
+    if (!imageUrl) {
+        alert('請上傳圖片');
+        return; // 停止表單提交
+    }
+
+
     const formData = new FormData(this);
     fetch(apiUrl, {
         method: method,
@@ -248,7 +274,7 @@ document.getElementById('menuForm').addEventListener('submit', function (e) {
     })
     .catch(error => {
         console.error('錯誤：', error);
-        alert(`載入資料失敗，請新增一張圖片`);
+        alert(`餐點名稱已存在`);
     });
 });
 </script>

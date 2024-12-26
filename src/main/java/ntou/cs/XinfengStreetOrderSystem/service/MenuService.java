@@ -3,10 +3,10 @@ package ntou.cs.XinfengStreetOrderSystem.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
 import ntou.cs.XinfengStreetOrderSystem.repository.MenuItemRepository;
@@ -61,44 +61,59 @@ public class MenuService {
         menuItemRepository.deleteById(id); // 根據 ID 刪除菜單項目
     }
 
-    public MenuItem addMenuItem(String name, String description, Double price, String setContents, String category,
-            MultipartFile image) throws IOException {
-        String imageName = fileStorageService.storeFile(image);
-        String imageUrl = "/uploads/" + imageName;
-        // 儲存圖片並取得檔案名稱
-
-        // 新增餐點物件
+   public MenuItem addMenuItem(String name, String description, Double price, String setContents, String category, String imageUrl) throws IOException {
+        List<MenuItem> existingMenuItem = menuItemRepository.findByNameContainingIgnoreCase(name);
+        if (!existingMenuItem.isEmpty()) {
+            throw new IllegalArgumentException("菜單名稱已存在！"); // 如果名稱已存在，拋出異常
+        }
+        // 創建新的 MenuItem 物件
         MenuItem menuItem = new MenuItem();
         menuItem.setName(name);
         menuItem.setDescription(description);
         menuItem.setPrice(price);
         menuItem.setSetContents(setContents);
         menuItem.setCategory(category);
+        menuItem.setImage(imageUrl); // 設定圖片 URL（如果有的話）
+        
+        // 儲存菜單項目
+        return menuItemRepository.save(menuItem);
+    }
+    
+    
+    
+    public MenuItem updateMenuItem(String id, String name, String description, Double price, String setContents, String category, String imageUrl) throws IOException {
+    // 檢查是否有其他菜單項目使用相同的名稱，但排除當前菜單項目
+    List<MenuItem> existingMenuItem = menuItemRepository.findByNameContainingIgnoreCase(name);
+    
+    // 檢查是否有名稱相同且 id 不相同的菜單項目
+    existingMenuItem = existingMenuItem.stream()
+            .filter(item -> !item.getId().equals(id)) // 排除當前菜單項目
+            .collect(Collectors.toList());
+
+    if (!existingMenuItem.isEmpty()) {
+        throw new IllegalArgumentException("菜單名稱已存在！"); // 如果名稱已存在，拋出異常
+    }
+
+    // 根據 ID 查找要更新的菜單項目
+    MenuItem menuItem = findById(id);
+    
+    // 更新菜單項目的屬性
+    menuItem.setName(name);
+    menuItem.setDescription(description);
+    menuItem.setPrice(price);
+    menuItem.setSetContents(setContents);
+    menuItem.setCategory(category);
+    
+    // 如果有新的圖片 URL，則更新圖片
+    if (imageUrl != null && !imageUrl.isEmpty()) {
         menuItem.setImage(imageUrl);
-
-        return menuItemRepository.save(menuItem);
     }
 
-    public MenuItem updateMenuItem(String id, String name, String description, Double price, String setContents,
-            String category, MultipartFile image) throws IOException {
-        MenuItem menuItem = findById(id);
-        menuItem.setName(name);
-        menuItem.setDescription(description);
-        menuItem.setPrice(price);
-        menuItem.setCategory(category);
-        menuItem.setSetContents(setContents);
+    // 儲存並返回更新後的菜單項目
+    return menuItemRepository.save(menuItem);
+}
 
-        if (image != null && !image.isEmpty()) {
-
-            String imageName = fileStorageService.storeFile(image);
-            String imageUrl = "/uploads/" + imageName;
-            menuItem.setImage(imageUrl);
-        }
-
-        return menuItemRepository.save(menuItem);
-
-    }
-
+    
     private MenuItem findById(String id) {
         // 使用 repository 查找對應的 menuItem
         return menuItemRepository.findById(id).orElseThrow();

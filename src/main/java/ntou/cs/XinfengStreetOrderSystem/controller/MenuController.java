@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
 import ntou.cs.XinfengStreetOrderSystem.exception.ResourceNotFoundException;
+import ntou.cs.XinfengStreetOrderSystem.service.CloudinaryService;
 import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
 
 @CrossOrigin(origins = "*")
@@ -29,7 +30,9 @@ import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
 public class MenuController {
     @Autowired
     private MenuService menuService;
-
+    
+    @Autowired
+    private CloudinaryService cloudinaryService;
     // 獲取所有菜單項目
     @GetMapping
     public ResponseEntity<List<MenuItem>> getAllMenuItems() {
@@ -104,43 +107,66 @@ public class MenuController {
         return ResponseEntity.noContent().build(); // 刪除成功，返回 204 No Content
     }
 
-    // 新增餐點
     @PostMapping
     public ResponseEntity<MenuItem> addMenuItem(@RequestParam String name,
-            @RequestParam String description,
-            @RequestParam Double price,
-            @RequestParam String setContents,
-            @RequestParam String category,
-
-            @RequestParam MultipartFile image) throws IOException {
-        if (image.isEmpty()) {
-            return ResponseEntity.badRequest().body(null); // 可以返回錯誤響應
-        }
-
+                                                @RequestParam String description,
+                                                @RequestParam Double price,
+                                                @RequestParam String setContents,
+                                                @RequestParam String category,
+                                                @RequestParam(required = false) MultipartFile image) throws IOException {
+      
         // 呼叫服務層處理圖片儲存及其他邏輯
-        MenuItem newMenuItem = menuService.addMenuItem(name, description, price, setContents, category, image);
-
-        return ResponseEntity.ok(newMenuItem);
+    
+            // 呼叫服務層處理圖片儲存及其他邏輯
+            String imageUrl = null;
+            if (image != null && !image.isEmpty()) {
+                imageUrl = cloudinaryService.uploadFile(image);
+            }
+            
+            // 呼叫服務層儲存菜單項目
+            MenuItem newMenuItem = menuService.addMenuItem(name, description, price, setContents, category, imageUrl);
+            
+            // 返回新增的菜單項目
+            return ResponseEntity.ok(newMenuItem);
+        
     }
+
+    
+
 
     // 修改餐點資訊
     @PutMapping("/{id}")
     public ResponseEntity<MenuItem> updateMenuItem(@PathVariable String id,
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam Double price,
-            @RequestParam String setContents,
-
-            @RequestParam String category,
-
-            @RequestParam(required = false) MultipartFile image) throws IOException {
+                                                   @RequestParam String name,
+                                                   @RequestParam String description,
+                                                   @RequestParam Double price,
+                                                   @RequestParam String setContents,
+                                                   @RequestParam String category,
+                                                   @RequestParam(required = false) MultipartFile image) throws IOException {
         try {
-            MenuItem updatedMenuItem = menuService.updateMenuItem(id, name, description, price, setContents, category,
-                    image);
+            // 處理圖片上傳，若圖片為空則設置為 null
+            String imageUrl = (image != null && !image.isEmpty()) ? cloudinaryService.uploadFile(image) : null;
+    
+            // 呼叫 Service 層來更新菜單項目
+            MenuItem updatedMenuItem = menuService.updateMenuItem(id, name, description, price, setContents, category, imageUrl);
+            
+            // 返回更新後的菜單項目
             return ResponseEntity.ok(updatedMenuItem);
+        
         } catch (ResourceNotFoundException e) {
+            // 若找不到對應的菜單項目，返回 NOT_FOUND 錯誤響應
             return ResponseEntity.notFound().build();
         }
-
+    }
+    
+    // 圖片上傳接口
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            String url = cloudinaryService.uploadFile(file);
+            return ResponseEntity.ok(url); // 返回圖片的 URL
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("上傳失敗！");
+        }
     }
 }
