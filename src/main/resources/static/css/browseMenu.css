@@ -466,3 +466,115 @@ h1 {
     }
 
 }
+
+@media (max-width: 480px) {
+    .container {
+        max-width: 100%; /* 容器寬度設定為100% */
+        padding: 10px; /* 減少內邊距 */
+        box-shadow: none; /* 去除陰影 */
+    }
+
+    .menu-item {
+        flex-direction: row; /* 垂直排列菜單項目 */
+        align-items: flex-start; /* 左對齊 */
+        padding: 10px 0; /* 上下內邊距 */
+    }
+
+    .item-image {
+        width: 40px; /* 圖片寬度自動調整 */
+        height: 40px; /* 高度自動調整 */
+        margin: 10px 0; /* 調整邊距 */
+    }
+
+    .item-info {
+        flex-direction: column; /* 垂直排列 */
+        margin-right: 0px;
+        gap: 5px; /* 增加項目間距 */
+    }
+
+    .search-bar input {
+        width: 100%; /* 搜索框寬度100% */
+        max-width: 100%; /* 最大寬度設為100% */
+    }
+
+    .categories {
+        flex-direction: row; /* 使分類標籤水平排列 */
+        justify-content: space-evenly; /* 均勻分布 */
+    }
+
+    .order-btn {
+        width: 50%; /* 按鈕寬度設為50% */
+        padding: 10px; /* 增加內邊距 */
+        font-size: 1em; /* 調整字體大小 */
+    }
+
+    .item-details {
+        flex-direction: column; /* 使數量和描述框垂直排列 */
+        align-items: flex-start; /* 左對齊 */
+        gap: 5px; /* 增加間距 */
+        margin-right: 0px;
+    }
+
+    .item-description-box {
+        width: 80%; /* 設定描述框寬度100% */
+        max-height: none; /* 讓描述框高度不再限制 */
+        margin: 5px 0; /* 調整邊距 */
+    }
+
+    .favorite-rating-group {
+        width: auto; /* 使愛心和評分組合寬度自動調整 */
+        margin-top: 10px; /* 增加間距 */
+        padding:0;
+    }
+
+    .rating-info {
+        font-size: 0.8em; /* 調整評價文字大小 */
+    }
+
+    .quantity-control button,
+    .quantity-control input {
+        font-size: 0.8em; /* 調整數量控制按鈕文字大小 */
+    }
+
+    .item-quantity-add-container {
+        flex-direction: column; /* 垂直排列 */
+        gap: 15px; /* 增加間距 */
+        width: 80%; /* 設定容器寬度為原來的80%（根據需要調整） */
+        font-size: 0.8em; /* 調整容器內部文字的大小（根據需要調整） */
+        padding: 5px; /* 調整內邊距以縮小元素 */
+        transform: scale(0.8);
+        margin-right: 0;
+    }
+
+    .quantity-control {
+        margin-right: 0; /* 去掉右邊距 */
+    }
+
+    .add-btn {
+        margin-right: 0; /* 去掉右邊距 */
+    }
+
+    .favorite-rating-group {
+        margin-right: 0; /* 去掉右邊距 */
+    }
+
+    .heart-icon {
+        height: 15px;
+        width: 15px;
+    }
+
+    .star-icon {
+        height: 15px;
+        width: 15px;
+    }
+
+    .menu-title {
+        font-size: 1.2em; /* 增加標題字體大小 */
+    }
+
+    .package-details{
+        position: absolute; /* 絕對定位，確保不影響其他元素 */
+        z-index: 10; /* 設置層級，防止被其他元素遮擋 */
+        width: 45px;
+    }    
+}

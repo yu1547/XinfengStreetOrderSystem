@@ -87,8 +87,10 @@ function renderMenu(menuData) {
                     </div>
                     <p class="item-price">$${item.price}</p>
                 </div>
-            <button class="edit-btn" onclick="editMenuItem('${item.id}')">編輯</button>
-            <button class="delete-btn" onclick="deleteMenuItem('${item.id}')">刪除</button>
+                <div class="btn-group">
+                    <button class="edit-btn" onclick="editMenuItem('${item.id}')">編輯</button>
+                    <button class="delete-btn" onclick="deleteMenuItem('${item.id}')">刪除</button>
+                </div>         
         </div>`
         )
         .join("");

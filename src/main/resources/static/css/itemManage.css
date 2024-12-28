@@ -228,6 +228,12 @@ h1 {
     font-size: 1em; /* 字體大小 */
     margin-right: 15px;
 }
+
+.btn-group {
+    display: flex; /* 使用 flexbox */
+    gap: 10px; /* 按鈕之間的間距 */
+    justify-content: flex-start; /* 按鈕靠左對齊 */
+}
 /* 編輯和刪除按鈕樣式 */
 .edit-btn, .delete-btn {
     padding: 5px 10px; /* 內邊距 */
@@ -287,8 +293,14 @@ h1 {
 
     .item-name-image{
         flex-direction: column; 
-        margin-right: 0;
+        margin-right: 30px;
         gap:5px;
+    }
+
+    .item-image {
+        width: 40px;
+        height: 40px;
+        margin: 10px 0; /* 調整邊距 */
     }
 
     .item-details {
@@ -297,6 +309,7 @@ h1 {
         align-items: flex-start;
         gap: 5px; /* 調整描述和價錢之間的距離 */
         margin-top: 5px;
+        margin-right:0px;
     }
     
     .item-description-box {
@@ -316,8 +329,16 @@ h1 {
         font-size: 1em; /* 字體大小 */
     }
 
+    .btn-group {
+        flex-direction: column; /* 垂直排列按鈕 */
+        width: 50%; /* 按鈕佔滿整個容器寬度 */
+        align-items: center;
+    }
+
     .edit-btn, .delete-btn {
-        align-items: center
+        width: 50%; /* 使按鈕在小螢幕上佔據整個容器寬度 */
+        margin-right: 0; /* 取消右邊距，避免超出容器 */
+        margin-bottom: 10px; /* 增加下邊距，避免擁擠 */
     }
 
     .categories {
@@ -327,5 +348,96 @@ h1 {
 
     .productList-btn {
         width: 50%;
+    }
+}
+@media (max-width: 480px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .menu-title {
+        font-size: 1.2em; /* 調整標題字體大小 */
+        margin-bottom: 10px;
+    }
+
+    .categories {
+        flex-direction: row; /* 使分類標籤水平排列 */
+        justify-content: space-evenly; /* 均勻分布 */
+    }
+
+    .item-name-image{
+        margin-right: 0px;
+    }
+
+    .item-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px; /* 調整描述和價錢之間的距離 */
+        margin-top: 5px;
+        margin-right: 15px;
+    }
+
+    .item-description-box {
+        width: 100%; /* 設定描述框寬度100% */
+        max-height: none; /* 讓描述框高度不再限制 */
+        margin: 5px 0; /* 調整邊距 */
+    }
+
+    .btn-group {
+        flex-direction: column; /* 垂直排列按鈕 */
+        width: 100%; /* 按鈕佔滿整個容器寬度 */
+        align-items: center;
+    }
+
+    .edit-btn, .delete-btn {
+        width: 50%; /* 使按鈕在小螢幕上佔據整個容器寬度 */
+        margin-right: 0; /* 取消右邊距，避免超出容器 */
+        margin-bottom: 10px; /* 增加下邊距，避免擁擠 */
+        font-size: 12px;
+        text-align: center; /* 確保文字在按鈕中居中 */
+    }
+
+    .menu-list {
+        margin-top: 20px; /* 增加菜單項目與分類標籤間的距離 */
+    }
+
+    .menu-item {
+        flex-direction: row; /* 垂直排列菜單項目 */
+        align-items: flex-start;
+        padding: 10px 0;
+    }
+
+    .item-image {
+        width: 40px;
+        height: 40px;
+        margin: 10px 0; /* 調整邊距 */
+    }
+
+    .item-info {
+        flex-direction: column; /* 垂直排列菜單項目資訊 */
+        margin-right: 0;
+        gap:5px;
+    }
+
+    .item-price {
+        font-size: 16px; /* 增大價格字體 */
+    }
+
+    .productList-btn {
+        width: 80%; /* 按鈕寬度設為50% */
+        padding: 10px; /* 增加內邊距 */
+        font-size: 1em; /* 調整字體大小 */
+    }
+
+    .package-group {
+        margin-right: 10px;
+    }
+
+    .package-details{
+        position: absolute; /* 絕對定位，確保不影響其他元素 */
+        z-index: 10; /* 設置層級，防止被其他元素遮擋 */
+        width: 45px;
     }
 }
