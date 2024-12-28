@@ -295,7 +295,6 @@ h1 {
 
     .item-name-image{
         flex-direction: column; 
-        margin-right: 30px;
         gap:5px;
     }
 
@@ -338,7 +337,7 @@ h1 {
     }
 
     .edit-btn, .delete-btn {
-        width: 50%; /* 使按鈕在小螢幕上佔據整個容器寬度 */
+        width: 50px; /* 使按鈕在小螢幕上佔據整個容器寬度 */
         margin-right: 0; /* 取消右邊距，避免超出容器 */
         margin-bottom: 10px; /* 增加下邊距，避免擁擠 */
     }
@@ -389,7 +388,7 @@ h1 {
     }
 
     .item-description-box {
-        width: 100%; /* 設定描述框寬度100% */
+        width: 70px; /* 設定描述框寬度100% */
         max-height: none; /* 讓描述框高度不再限制 */
         margin: 5px 0; /* 調整邊距 */
     }
@@ -401,7 +400,7 @@ h1 {
     }
 
     .edit-btn, .delete-btn {
-        width: 50%; /* 使按鈕在小螢幕上佔據整個容器寬度 */
+        width: 30px; /* 使按鈕在小螢幕上佔據整個容器寬度 */
         margin-right: 0; /* 取消右邊距，避免超出容器 */
         margin-bottom: 10px; /* 增加下邊距，避免擁擠 */
         font-size: 12px;
