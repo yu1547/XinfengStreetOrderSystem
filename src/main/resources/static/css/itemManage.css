@@ -132,6 +132,8 @@ h1 {
     display: flex;
     align-items: center;
     gap: 5px;
+    position: relative; /* 絕對定位，確保不影響其他元素 */
+    z-index: 10; /* 設置層級，防止被其他元素遮擋 */
 }
 
 .arrow-icon {
@@ -444,7 +446,7 @@ h1 {
 
     .package-details{
         position: absolute; /* 絕對定位，確保不影響其他元素 */
-        z-index: 10; /* 設置層級，防止被其他元素遮擋 */
+        z-index: 8; /* 設置層級，防止被其他元素遮擋 */
         width: 45px;
     }
 }

@@ -131,6 +131,8 @@ h1 {
     display: flex;
     align-items: center;
     gap: 5px;
+    position: relative;
+    z-index: 10;
 }
 
 .arrow-icon {
@@ -518,7 +520,7 @@ h1 {
     .item-description-box {
         width: 80%; /* 設定描述框寬度100% */
         max-height: none; /* 讓描述框高度不再限制 */
-        margin: 5px 0; /* 調整邊距 */
+        margin-right: 0px;
     }
 
     .favorite-rating-group {
@@ -574,7 +576,7 @@ h1 {
 
     .package-details{
         position: absolute; /* 絕對定位，確保不影響其他元素 */
-        z-index: 10; /* 設置層級，防止被其他元素遮擋 */
+        z-index: 8; /* 設置層級，防止被其他元素遮擋 */
         width: 45px;
     }    
 }
