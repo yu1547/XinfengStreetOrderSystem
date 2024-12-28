@@ -366,6 +366,13 @@ h1 {
         justify-content: space-evenly; /* 均勻分布 */
     }
 
+    .new-item-btn {
+        padding-top: 10px;   /* 上內邊距 */
+        padding-right: 8px; /* 右內邊距 */
+        padding-bottom: 10px;/* 下內邊距 */
+        padding-left: 8px;  /* 左內邊距 */
+    }
+
     .item-name-image{
         margin-right: 0px;
     }
