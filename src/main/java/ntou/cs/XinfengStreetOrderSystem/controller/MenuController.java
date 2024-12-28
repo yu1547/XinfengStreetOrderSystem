@@ -30,9 +30,10 @@ import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
 public class MenuController {
     @Autowired
     private MenuService menuService;
-    
+
     @Autowired
     private CloudinaryService cloudinaryService;
+
     // 獲取所有菜單項目
     @GetMapping
     public ResponseEntity<List<MenuItem>> getAllMenuItems() {
@@ -89,7 +90,7 @@ public class MenuController {
         List<String> menuItemIds = request.get("menuItemIds");
 
         if (menuItemIds == null || menuItemIds.isEmpty()) {
-            return ResponseEntity.badRequest().body(null);  // 如果請求體中沒有menuItemIds，返回400
+            return ResponseEntity.badRequest().body(null); // 如果請求體中沒有menuItemIds，返回400
         }
 
         // 查詢菜單項目
@@ -97,68 +98,74 @@ public class MenuController {
         return ResponseEntity.ok(menuItems);
     }
 
-    
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMenuItem(@PathVariable String id) {
-        if (!menuService.existsById(id)) { // 檢查菜單項目是否存在
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 如果找不到該菜單項目，返回 404
+    public ResponseEntity<String> deleteMenuItem(@PathVariable String id) {
+        try {
+            // 調用服務來標記菜單項目為不可用
+            menuService.deleteMenuItem(id);
+
+            // 使用 ResponseEntity 返回一個 JSON 格式的成功響應
+            return ResponseEntity.ok("{\"message\": \"菜單項目已成功標記為不可用\"}");
+        } catch (IllegalArgumentException e) {
+            // 如果菜單項目不存在，返回 404 錯誤並包含錯誤信息
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"菜單項目未找到\"}");
+        } catch (Exception e) {
+            // 處理其他錯誤，返回 500 錯誤並顯示錯誤消息
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"message\": \"刪除失敗: " + e.getMessage() + "\"}");
         }
-        menuService.deleteMenuItem(id); // 刪除菜單項目
-        return ResponseEntity.noContent().build(); // 刪除成功，返回 204 No Content
     }
 
     @PostMapping
     public ResponseEntity<MenuItem> addMenuItem(@RequestParam String name,
-                                                @RequestParam String description,
-                                                @RequestParam Double price,
-                                                @RequestParam String setContents,
-                                                @RequestParam String category,
-                                                @RequestParam(required = false) MultipartFile image) throws IOException {
-      
+            @RequestParam String description,
+            @RequestParam Double price,
+            @RequestParam String setContents,
+            @RequestParam String category,
+            @RequestParam(required = false) MultipartFile image) throws IOException {
+
         // 呼叫服務層處理圖片儲存及其他邏輯
-    
-            // 呼叫服務層處理圖片儲存及其他邏輯
-            String imageUrl = null;
-            if (image != null && !image.isEmpty()) {
-                imageUrl = cloudinaryService.uploadFile(image);
-            }
-            
-            // 呼叫服務層儲存菜單項目
-            MenuItem newMenuItem = menuService.addMenuItem(name, description, price, setContents, category, imageUrl);
-            
-            // 返回新增的菜單項目
-            return ResponseEntity.ok(newMenuItem);
-        
+
+        // 呼叫服務層處理圖片儲存及其他邏輯
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            imageUrl = cloudinaryService.uploadFile(image);
+        }
+
+        // 呼叫服務層儲存菜單項目
+        MenuItem newMenuItem = menuService.addMenuItem(name, description, price, setContents, category, imageUrl);
+
+        // 返回新增的菜單項目
+        return ResponseEntity.ok(newMenuItem);
+
     }
-
-    
-
 
     // 修改餐點資訊
     @PutMapping("/{id}")
     public ResponseEntity<MenuItem> updateMenuItem(@PathVariable String id,
-                                                   @RequestParam String name,
-                                                   @RequestParam String description,
-                                                   @RequestParam Double price,
-                                                   @RequestParam String setContents,
-                                                   @RequestParam String category,
-                                                   @RequestParam(required = false) MultipartFile image) throws IOException {
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam Double price,
+            @RequestParam String setContents,
+            @RequestParam String category,
+            @RequestParam(required = false) MultipartFile image) throws IOException {
         try {
             // 處理圖片上傳，若圖片為空則設置為 null
             String imageUrl = (image != null && !image.isEmpty()) ? cloudinaryService.uploadFile(image) : null;
-    
+
             // 呼叫 Service 層來更新菜單項目
-            MenuItem updatedMenuItem = menuService.updateMenuItem(id, name, description, price, setContents, category, imageUrl);
-            
+            MenuItem updatedMenuItem = menuService.updateMenuItem(id, name, description, price, setContents, category,
+                    imageUrl);
+
             // 返回更新後的菜單項目
             return ResponseEntity.ok(updatedMenuItem);
-        
+
         } catch (ResourceNotFoundException e) {
             // 若找不到對應的菜單項目，返回 NOT_FOUND 錯誤響應
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     // 圖片上傳接口
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {

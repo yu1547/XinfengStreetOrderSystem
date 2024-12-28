@@ -38,8 +38,14 @@ async function fetchMenuData(category) {
     try {
         const response = await fetch(`/api/menu/${category}`);
         const menuData = await response.json();
-        fullMenuData = menuData; // 儲存完整菜單資料
-        renderMenu(menuData);
+        console.log(menuData);
+        if (Array.isArray(menuData) && menuData.length > 0) {
+            fullMenuData = menuData;  // 儲存完整菜單資料
+            renderMenu(menuData);  // 渲染菜單
+        } else {
+            console.log("該分類下沒有菜單項目");
+            fetchCategories(); // 重新加載分類列表
+        }
     } catch (error) {
         console.error("無法獲取菜單資料:", error);
     }
@@ -145,15 +151,8 @@ function deleteMenuItem(itemId) {
         .then(response => response.json())
         .then(data => {
             alert("菜單項目已刪除！");
-            fetchMenuData(currentCategory).then(menuItems => {
-                // 如果當前分類已經沒有菜單項目
-                if (!menuItems || menuItems.length === 0) {
-                    alert("該分類已無任何菜單，重新載入分類列表！");
-                    // 重新載入分類並切換到第一個分類
-                    fetchCategories();
-                }
-            });
-
+            // 刪除後重新獲取當前分類的菜單項目
+            fetchMenuData(currentCategory); // 這裡不要再傳回menuItems，只需重新獲取
         })
         .catch(error => {
             console.error("無法刪除菜單項目:", error);

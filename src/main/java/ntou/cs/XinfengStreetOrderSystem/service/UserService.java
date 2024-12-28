@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ntou.cs.XinfengStreetOrderSystem.entity.MenuItem;
 import ntou.cs.XinfengStreetOrderSystem.entity.User;
 import ntou.cs.XinfengStreetOrderSystem.entity.User.OrderHistory;
 import ntou.cs.XinfengStreetOrderSystem.repository.MenuItemRepository;
 import ntou.cs.XinfengStreetOrderSystem.repository.UserRepository;
+import ntou.cs.XinfengStreetOrderSystem.service.MenuService;
 
 @Service
 public class UserService {
@@ -27,6 +30,9 @@ public class UserService {
 
     @Autowired
     private MenuItemRepository menuItemRepository;
+
+    @Autowired
+    private MenuService menuService;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -94,11 +100,31 @@ public class UserService {
     public List<User.FavoriteItem> getFavoriteItemsList(String userId) {
         System.out.println("back userId: " + userId);
         Optional<User> user = userRepository.findById(userId);
-        System.out.println(userRepository.findById(userId));
-        System.out.println("User: " + user);
-        System.out.println("User: " + user.isPresent());
+        System.out.println("User found: " + user.isPresent());
+
         if (user.isPresent()) {
-            return user.get().getFavoriteItems();
+            // Step 1: Get the list of favorite item IDs from the user
+            List<String> favoriteItemIds = user.get().getFavoriteItems().stream()
+                    .map(User.FavoriteItem::getMenuItemId) // Assuming FavoriteItem has menuItemId
+                    .collect(Collectors.toList());
+
+            // Step 2: Use the getMenuItemsByIds() method to get the actual menu items
+            List<MenuItem> menuItems = menuService.getMenuItemsByIds(favoriteItemIds);
+
+            // Step 3: Filter the menu items to only include those that are available
+            // (isAvailable == true)
+            List<MenuItem> availableItems = menuItems.stream()
+                    .filter(item -> item.getIsAvailable()) // Only keep items where isAvailable is true
+                    .collect(Collectors.toList());
+
+            List<User.FavoriteItem> favoriteItems = new ArrayList<>();
+            for (MenuItem item : availableItems) {
+                User.FavoriteItem favoriteItem = new User.FavoriteItem();
+                favoriteItem.setMenuItemId(item.getId()); // 使用 MenuItem 的 ID
+                favoriteItem.setAddedAt(new Date()); // 初始化日期
+                favoriteItems.add(favoriteItem); // 加入到列表
+            }
+            return favoriteItems;
         } else {
             throw new RuntimeException("User not found");
         }
