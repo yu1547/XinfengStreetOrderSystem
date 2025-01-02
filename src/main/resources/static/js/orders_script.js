@@ -1,23 +1,6 @@
 // 定義全域變數 businessHours
 let businessHours = null;
 $(document).ready(function() {
-    // // 測試用代碼：將測試的 cart 存入 sessionStorage，日後刪除
-    // // ---------測試用代碼 (開始)--------
-    // const testCart = {
-    //     cart: [
-    //     {
-    //         menuItemId: "675dec118a90d51a011f6308",
-    //         quantity: 2
-    //     },
-    //     {
-    //         menuItemId: "675dec798a90d51a011f6309",
-    //         quantity: 1
-    //     }
-    //     ]
-    // };
-    // sessionStorage.setItem('cart', JSON.stringify(testCart));
-    // console.log('測試用 cart 已存入 sessionStorage：', testCart);
-    // // ---------測試用代碼 (結束)--------
     
     // 從後端取得營業時間並儲存到全域變數
     $.ajax({
