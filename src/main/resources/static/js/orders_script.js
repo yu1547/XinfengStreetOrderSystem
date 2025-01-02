@@ -231,14 +231,24 @@ function validateOrder() {
 
     // 檢查最短提前時間（來自 businessHours）
     const minimumOrderLeadTime = businessHours.minimumOrderLeadTime;
-    const selectedTime = new Date(`${pickupDate}T${pickupTime}`);
-    const timeDiff = selectedTime - currentDate;
+    const selectedTime = `${pickupTime}`;
+    const currentDateTime = new Date();
+    const currentTime = `${currentDateTime.getHours()}:${currentDateTime.getMinutes()}`;
+
+    const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
+    const timeDiff = selectedDateTime - currentDateTime;
+
+    console.log("minimumOrderLeadTime =", minimumOrderLeadTime);
+    console.log("selectedTime =", selectedTime);
+    console.log("currentTime =", currentTime);
+    console.log("timeDiff =", timeDiff);
 
     // 如果是今天，檢查取餐時間是否滿足 minimumOrderLeadTime 的提前時間
-    if (selectedDate.toDateString() === currentDate.toDateString() && timeDiff < minimumOrderLeadTime * 60 * 1000) {
+    if (selectedDateTime.toDateString() === currentDateTime.toDateString() && timeDiff < minimumOrderLeadTime * 60 * 1000) {
         alert(`取餐時間必須為當前時間的 ${minimumOrderLeadTime} 分鐘後！`);
         return false;
     }
+
 
     return true;
 }
@@ -305,6 +315,7 @@ function submitOrder() {
         success: function(response) {
             console.log("後端回應：", response); // 確認後端返回的內容
             alert("訂單提交成功！");
+            sessionStorage.removeItem('cart'); // 清除 session storage 中的 cart
             window.location.href = `state.html?id=${response}`;
         },
         error: function(xhr, status, error) {
@@ -313,6 +324,7 @@ function submitOrder() {
         }
     });
 }
+
 
 
 
