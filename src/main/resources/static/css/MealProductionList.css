@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: bold; /* 全部字體加粗 */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F4E1C1;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* 確保內容不會超出容器範圍 */
+}
+
+button {
+    display: block; /* 確保按鈕在其父容器內占據獨立一行 */
+    margin: 8px auto; /* 自動將按鈕水平方向居中 */
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #6F2B2B;
+    border: 5px solid #6F2B2B;
+    padding: 10px;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+table {
+width: 100%;
+max-width: 600px;
+border-collapse: collapse;
+margin-top: 20px;
+border: none;
+table-layout: fixed; /* 讓表格的寬度固定 */
+}
+
+th, td {
+border-bottom: 1px solid #ddd; /* 只顯示橫線 */
+padding: 8px;
+text-align: center;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: normal; /* 允許文字換行 */
+word-wrap: break-word; /* 強制長字串換行 */
+overflow-wrap: break-word; /* 兼容性：防止文字溢出 */
+}
+
+th {
+    background-color: #6F2B2B;
+    color: white;
+}
+
+/* 所有按鈕的基本樣式 */
+button {
+    min-width: 70px; /* 縮小最小寬度 */
+    padding: 8px 16px; /* 減小內邊距 */
+    border: none;
+    border-radius: 8px; /* 減小圓角半徑 */
+    font-size: 0.9rem; /* 減小字體大小 */
+    cursor: pointer;
+    color: white;
+}
+
+@media (max-width: 480px) {
+    button {
+        min-width: 100%; /* 全寬 */
+        padding: 8px; /* 減小內邊距 */
+        font-size: 0.8rem; /* 字體縮小 */
+    }
+
+    .accept-button, .reject-button {
+        display: block; /* 每個按鈕獨占一行 */
+        margin-bottom: 10px; /* 間距調整 */
+    }
+
+    th, td {
+        font-size: 0.9rem; /* 表格字體縮小 */
+    }
+}
+
+
+/* 接受鍵樣式 */
+.accept-button {
+    background-color: #E0E0FF; /* 淡紫色背景 */
+    color: #000000; /* 黑色字體 */
+}
+
+/* 拒絕鍵樣式 */
+.reject-button {
+    background-color: #781717; /* 深紅色背景 */
+}
+
+/* 已拒絕狀態紅色字體 */
+.rejected-status {
+    color: red;
+}
+
+/* 已完成狀態藍色字體 */
+.completed-status {
+    color: blue;
+}
+
+
+.total-revenue {
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #6F2B2B;
+}
+
+.back-button {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6F2B2B;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    table {
+        max-width: 100%;
+    }
+
+    th, td {
+        padding: 12px;
+    }
+}

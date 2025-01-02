@@ -1,0 +1,104 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-weight: bold;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #F4E1C1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #6F2B2B;
+            border: 5px solid #6F2B2B;
+            padding: 10px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            max-width: 600px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: none;
+        }
+
+        th, td {
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #6F2B2B;
+            color: white;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            direction: rtl;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .rating input:checked ~ label {
+            color: #FFD700;
+        }
+
+        .rating input:hover ~ label,
+        .rating input:checked ~ label ~ label {
+            color: #FFD700;
+        }
+
+        .rating input:checked ~ label:hover,
+        .rating input:checked ~ label:hover ~ label {
+            color: #FFD700;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button, .back-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: white;
+            background-color: #6F2B2B;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .submit-button {
+            background-color: #6F2B2B;
+        }

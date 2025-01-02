@@ -164,7 +164,7 @@ function deleteMenuItem(itemId) {
 
 // 跳轉到餐點製作清單
 function redirectToProductionPage() {
-    window.location.href = "Meal Production List.html";
+    window.location.href = "MealProductionList.html";
 }
 
 document.getElementById('List-btn').addEventListener('click', redirectToProductionPage);

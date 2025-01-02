@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>餐點製作清單</title>
+    <link rel="stylesheet" href="/css/MealProductionList.css">
+</head>
+<body>
+    <div class="container">
+        <h1>餐點製作清單</h1>
+        <div id="order-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>序號</th>
+                        <th>餐點內容物</th>
+                        <th>製作狀態</th>
+                        <th>金額</th>
+                        <th>備註</th>  <!-- 新增的備註欄位 -->
+                        <th>預計取餐時間</th>  <!-- 新增的預計取餐時間欄位 -->
+                        <th>操作</th>
+                    </tr>
+                </thead>                
+                <tbody id="orders">
+                    <!-- 餐點清單會在這裡顯示 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-revenue" id="revenue">本日營業額: 0 元</div>
+        <a href="itemManage.html" class="back-button">返回</a>
+    </div>
+    <script src="js/sessionCheck.js"></script>
+    <script src="js/MealProductionList.js"></script>
+    
+</body>
+</html>

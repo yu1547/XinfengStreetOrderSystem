@@ -59,7 +59,7 @@ public class MailController {
         String orderDetails = payload.get("orderDetails");
 
         // 設定郵件內容
-        String messageContent = "您好，\n\n您的訂單詳細資料如下：\n" + orderDetails + "\n\n謝謝您的支持！!   !";
+        String messageContent = "您好，\n\n您的訂單詳細資料如下：\n" + orderDetails + "\n\n謝謝您的支持！";
 
         // 發送訂單通知郵件
         mailService.sendOrderNotificationEmail(email, messageContent);
