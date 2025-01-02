@@ -29,7 +29,7 @@ public class OrderService {
 
     // 查詢所有製作中的訂單 (狀態為 accepted)
     public List<Order> getAcceptedOrders() {
-        return orderRepository.findByOrderStatus("accepted");
+        return orderRepository.findByOrderStatus("已接受");
     }
 
     // 更新訂單狀態為完成並發送郵件通知
@@ -37,12 +37,12 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
 
-        if (!order.getOrderStatus().equals("accepted")) {
+        if (!order.getOrderStatus().equals("已接受")) {
             throw new IllegalArgumentException("訂單狀態不允許完成");
         }
 
         // 更新訂單狀態為完成
-        order.setOrderStatus("completed");
+        order.setOrderStatus("已完成");
         order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
 
@@ -56,11 +56,11 @@ public class OrderService {
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
     
-            if (!order.getOrderStatus().equals("pending")) {
+            if (!order.getOrderStatus().equals("待接受")) {
                 throw new IllegalArgumentException("訂單狀態不允許接受");
             }
     
-            order.setOrderStatus("accepted");
+            order.setOrderStatus("已接受");
             order.setStatusUpdatedAt(new Date()); // 更新時間
             orderRepository.save(order);
     
@@ -78,11 +78,11 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("訂單不存在"));
 
-        if (!order.getOrderStatus().equals("pending") && !order.getOrderStatus().equals("accepted")) {
+        if (!order.getOrderStatus().equals("待接受") && !order.getOrderStatus().equals("已接受")) {
             throw new IllegalArgumentException("訂單狀態不允許拒絕");
         }
 
-        order.setOrderStatus("rejected");
+        order.setOrderStatus("已拒絕");
         order.setStatusUpdatedAt(new Date()); // 更新時間
         orderRepository.save(order);
 

@@ -119,7 +119,7 @@ public class OrderController {
         order.setCustomerId(customerId);
         order.setOrderNumber(orderService.getNextOrderNumber());
         order.setStatusUpdatedAt(new Date());
-        order.setOrderStatus("pending");
+        order.setOrderStatus("待接受");
         System.out.println("Order note: " + order.getNotes());
         order = orderRepository.save(order);
         // 確保訂單 ID 已經成功生成

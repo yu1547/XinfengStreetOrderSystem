@@ -16,7 +16,7 @@ public class Order {
     private String customerId;
     private List<OrderItem> items;
     private double totalPrice;
-    private String orderStatus="pending";
+    private String orderStatus="待接受";
     private Date pickupTime;
     private int orderNumber;
     private String notes=""; // 新增的備註字段

@@ -19,13 +19,13 @@
 
     for (const order of todaysOrders) {
         const statusClass = 
-        order.orderStatus === 'rejected' ? 'rejected-status' : 
-        order.orderStatus === 'completed' ? 'completed-status' : '';
+        order.orderStatus === '已拒絕' ? 'rejected-status' : 
+        order.orderStatus === '已完成' ? 'completed-status' : '';
         const row = document.createElement('tr');
         const notesContent = order.notes ? order.notes : '無';
         const pickupTimeContent = order.pickupTime ? new Date(order.pickupTime).toLocaleString() : '未設定';
         
-        let statusContent = '';
+       /* let statusContent = '';
         switch (order.orderStatus) {
             case 'pending':
                 statusContent = '待接受';
@@ -41,7 +41,7 @@
                 break;
             default:
                 statusContent = order.orderStatus;
-        }
+        }*/
 
         let itemsContent = '';
         for (const item of order.items) {
@@ -52,22 +52,22 @@
         row.innerHTML = `
             <td>${order.orderNumber}</td>
             <td>${itemsContent}</td>
-            <td class="${statusClass}">${statusContent}</td>
+            <td class="${statusClass}">${order.orderStatus}</td>
             <td>${order.totalPrice}元</td>
             <td>${notesContent}</td>
             <td>${pickupTimeContent}</td>
             <td>
-                ${order.orderStatus === 'accepted' ? 
+                ${order.orderStatus === '已接受' ? 
                     `<button class="accept-button" onclick="completeOrder('${order.id}')">完成</button>
                      <button class="reject-button" onclick="rejectOrder('${order.id}')">拒絕</button>` : ''}
-                ${order.orderStatus === 'pending' ? 
+                ${order.orderStatus === '待接受' ? 
                     `<button class="accept-button" onclick="acceptOrder('${order.id}')">接受</button>
                      <button class="reject-button" onclick="rejectOrder('${order.id}')">拒絕</button>` : ''}
             </td>
         `;
         orderList.appendChild(row);
 
-        if (order.orderStatus === 'completed') {
+        if (order.orderStatus === '已完成') {
             totalRevenue += order.totalPrice;
         }
     }
