@@ -69,6 +69,7 @@ public class MenuService {
         if (optionalMenuItem.isPresent()) {
             MenuItem menuItem = optionalMenuItem.get();
             menuItem.setIsAvailable(false); // 將 isAvailable 設為 false
+            menuItem.setName(menuItem.getName() + " ( 已刪除 )");
             menuItemRepository.save(menuItem); // 儲存更新後的菜單項目
             return ResponseEntity.ok("菜單項目已更新為不可用");
         } else {
