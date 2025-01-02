@@ -119,7 +119,13 @@ button:hover {
     cursor: pointer;
     border-radius: 5px;
 }
-@media (max-width: 768px) {
+/* 調整餐點數量框大小 */
+.quantity-controls input {
+    width: 50px; /* 默認寬度 */
+}
+
+/* RWD */
+@media (max-width: 600px) {
     .container {
         width: 90%;
         padding: 15px;
@@ -159,15 +165,26 @@ button:hover {
         margin-top: 5px;
     }
 
-    #quantity1, #quantity2 {
-        width: 50px;
+    .quantity-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .quantity-controls button,
+    .quantity-controls input {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .quantity-controls input {
+        text-align: center;
     }
 
     .pickup-time, .notes, .total {
         font-size: 14px;
     }
 
-    
     .submit-btn button {
         width: 100%;
     }

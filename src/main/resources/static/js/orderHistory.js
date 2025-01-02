@@ -6,6 +6,7 @@ $(document).ready(function () {
     // // //--------------測試用，後續刪除-------------
 
     // const userId = sessionStorage.getItem("userId"); // 假設 userId 是儲存在 sessionStorage 中
+    $('#order-history-container').before('<div id="loading-message">歷史訂單紀錄正在加載中...</div>');
 
     function fetchOrderHistory() {
         $.ajax({
@@ -28,6 +29,7 @@ $(document).ready(function () {
     
     function renderOrderHistory(orders) {
         const container = $('#order-history-container');
+        const loadingMessage = $('#loading-message');
         container.empty();
     
         // 先將訂單倒序排列
@@ -58,6 +60,9 @@ $(document).ready(function () {
             `);
             container.append(orderItem);
         });
+
+        // 隱藏加載訊息 
+        loadingMessage.hide();
     }
     
     
