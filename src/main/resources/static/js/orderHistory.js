@@ -53,12 +53,13 @@ $(document).ready(function () {
                             `).join('')}
                         </div>
                     </div>
-                    <a href="/MealRating.html?orderId=${order.orderId}" class="rating-btn">評價</a>
+                    ${order.orderStatus === "completed" || order.orderStatus === "已完成" ? `<a href="/MealRating.html?orderId=${order.orderId}" class="rating-btn">評價</a>` : ''}
                 </div>
             `);
             container.append(orderItem);
         });
     }
+    
     
 
     $('#backButton').click(function () {
