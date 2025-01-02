@@ -26,7 +26,7 @@ public class MailService {
         message.setFrom("新豐街早餐店 <henhaobr1214@gmail.com>"); // 指定寄件者名稱
         message.setTo(to);
         message.setSubject("新豐街早餐店 - 訂單通知");
-        message.setText("您好，\n\n" + messageContent + "\n\n謝謝您的支持！!!!!");
+        message.setText("您好，\n\n" + messageContent + "\n\n謝謝您的支持！!");
         mailSender.send(message);
     }
 }
